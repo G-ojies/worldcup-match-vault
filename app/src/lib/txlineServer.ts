@@ -68,3 +68,32 @@ export async function txlineGet<T = any>(pathname: string): Promise<T> {
   }
   return res.json();
 }
+
+/**
+ * Some TxLINE endpoints (notably `/api/scores/historical/{id}`) reply with
+ * `text/event-stream` — a replay of `data: {...}` lines rather than a JSON
+ * array. Read the whole body and collect each `data:` payload into an array.
+ */
+export async function txlineGetSseArray<T = any>(pathname: string): Promise<T[]> {
+  const c = getCreds();
+  const res = await fetch(`${c.apiOrigin}${pathname}`, {
+    headers: { ...authHeaders(), Accept: "text/event-stream" },
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`TxLINE ${pathname} -> ${res.status} ${body.slice(0, 200)}`);
+  }
+  const text = await res.text();
+  const out: T[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.startsWith("data:")) continue;
+    const payload = line.slice(5).trimStart();
+    if (!payload) continue;
+    try {
+      out.push(JSON.parse(payload));
+    } catch {
+      /* skip heartbeats / non-JSON frames */
+    }
+  }
+  return out;
+}
