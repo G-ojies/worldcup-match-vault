@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #0a0e0f;
+  color: #e7eef0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Wallet adapter button — restyled to fit the dark theme. */
+.wallet-adapter-button {
+  background: #10b981 !important;
+  color: #04130d !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  height: 40px !important;
+  font-family: var(--font-sans) !important;
+}
+.wallet-adapter-button:not([disabled]):hover {
+  background: #34d399 !important;
+}
+.wallet-adapter-modal-wrapper {
+  background: #0f1518 !important;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/5 bg-pitch-900/80 backdrop-blur;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply btn bg-turf-500 text-pitch-950 hover:bg-turf-400;
+  }
+  .btn-ghost {
+    @apply btn border border-white/10 text-white/80 hover:border-white/25 hover:text-white;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-pitch-950/60 px-3 py-2 text-sm text-white outline-none transition focus:border-turf-500/60 focus-visible:ring-2 focus-visible:ring-turf-500/40;
+  }
+}
+
+/* Entrance motion — disabled when the user prefers reduced motion. */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade { animation: fade-in 0.18s ease-out both; }
+  .animate-rise { animation: rise-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}

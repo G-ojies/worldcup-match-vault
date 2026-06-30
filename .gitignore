@@ -1,0 +1,16 @@
+.anchor
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+.surfpool
+
+# secrets / local env — never commit (public repo)
+**/.env
+**/.env.local
+**/.env*.local
+**/credentials.json
+.next
+**/.next

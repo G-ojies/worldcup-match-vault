@@ -1,0 +1,25 @@
+{
+  "name": "txline-access",
+  "private": true,
+  "version": "0.1.0",
+  "description": "TxLINE devnet access bootstrap + feed adapter for WorldCup Match Vault",
+  "type": "commonjs",
+  "scripts": {
+    "bootstrap": "ts-node src/bootstrap-access.ts",
+    "verify": "ts-node src/verify-access.ts",
+    "probe": "ts-node src/probe-validation.ts",
+    "e2e": "ts-node src/devnet-trustless-e2e.ts"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.8",
+    "axios": "^1.7.7",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
