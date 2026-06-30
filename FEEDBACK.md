@@ -39,6 +39,10 @@ primary data source and settlement layer.
    would help tooling.
 6. **The `subscribe` free tier still needs a TxL ATA to exist.** We create it idempotently before
    subscribing; documenting that for the zero-cost path would avoid a confusing first failure.
+7. **`/api/scores/historical/{fixtureId}` replies as `text/event-stream`** (`data: {…}` lines), while
+   the sibling `/api/scores/snapshot` and `/api/scores/updates` return JSON arrays. The inconsistency
+   isn't called out in the docs and quietly breaks a `res.json()` consumer — documenting which score
+   endpoints stream vs. return arrays (and ideally a content-type note) would help.
 
 ## Net
 
