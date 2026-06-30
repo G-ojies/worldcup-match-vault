@@ -45,6 +45,33 @@ above; pushes to `main` then auto-deploy.
 > A paid devnet RPC (Helius/Triton/QuickNode) is recommended for the public demo — the public
 > `api.devnet.solana.com` endpoint rate-limits under load and can make wallet reads flaky.
 
+## Deploying the program on the public devnet RPC (rate-limit lesson)
+
+`anchor deploy` / `solana program deploy` upload the ~250 KB program in ~1 KB chunks (≈250 write
+transactions). On the public `https://api.devnet.solana.com` endpoint this reliably triggers
+`429 Too Many Requests`.
+
+**The fix that worked here: do NOT pass `--use-rpc`.** That flag forces *every* chunk-upload tx through
+the RPC; without it, chunks are sent via TPU and only blockhash/confirmation hit the RPC — far lighter,
+and it landed on the first clean attempt. `anchor deploy` also defaults to `--use-rpc`, which is why it
+failed; call `solana` directly instead:
+
+```bash
+solana program deploy target/deploy/worldcup_match_vault.so \
+  --program-id target/deploy/worldcup_match_vault-keypair.json \
+  --url https://api.devnet.solana.com \
+  --with-compute-unit-price 50000 --max-sign-attempts 100
+# verify the on-chain bytes match the local build:
+solana program dump <PROGRAM_ID> /tmp/onchain.so --url devnet
+cmp <(python3 -c "import sys;sys.stdout.buffer.write(open('/tmp/onchain.so','rb').read().rstrip(b'\\0'))") \
+    <(python3 -c "import sys;sys.stdout.buffer.write(open('target/deploy/worldcup_match_vault.so','rb').read().rstrip(b'\\0'))") \
+  && echo "on-chain == local"
+```
+
+If a failed attempt stranded SOL in a buffer, reclaim it before retrying:
+`solana program show --buffers --url devnet` then `solana program close --buffers --url devnet`.
+A paid RPC (Helius/Triton/QuickNode) avoids the throttling entirely, but isn't required.
+
 ## Notes
 
 - `next.config.js` already sets browser fallbacks for the Node core modules some Solana deps import.
