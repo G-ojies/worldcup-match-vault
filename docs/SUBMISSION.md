@@ -13,7 +13,7 @@ authority.
 
 **Demo video (≤5 min, mandatory):** `[FILL: Loom/YouTube link]`
 
-**Public GitHub repo:** `[FILL: repo URL]`
+**Public GitHub repo:** https://github.com/G-ojies/worldcup-match-vault
 
 **Application access (deployed build):**
 - Frontend (live, devnet): **https://worldcup-match-vault.vercel.app**
@@ -68,5 +68,5 @@ proof-JSON↔IDL field-name mismatches worth documenting.
 - [x] Deployed build (devnet) using TxLINE feeds
 - [x] Working build, not a concept/wireframe
 - [x] Frontend deployed and linked — https://worldcup-match-vault.vercel.app
-- [ ] Public repo pushed to GitHub + linked
+- [x] Public repo pushed to GitHub — https://github.com/G-ojies/worldcup-match-vault
 - [ ] Demo video recorded and linked
