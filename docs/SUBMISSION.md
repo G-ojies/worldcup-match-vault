@@ -16,7 +16,7 @@ authority.
 **Public GitHub repo:** `[FILL: repo URL]`
 
 **Application access (deployed build):**
-- Frontend (devnet): `[FILL: Vercel URL]`
+- Frontend (live, devnet): **https://worldcup-match-vault.vercel.app**
 - Deployed program (devnet): `E5ffcawirq6hVse98NJVDGQ4RSkkNAYWzN2RNoRAikzJ`
 - Reproducible end-to-end on devnet: `cd txline && npm run e2e`
 - Live settlement tx (proof of working build): `4wfFF3VqH5dk3zuWq5JuSKuU4uVsXgxQwzi1c94tRm6zYkVHHHcDpEcVy7LNdCjTTygxi8gtAf1TEwAmBhUnPVXf`
@@ -67,6 +67,6 @@ proof-JSON↔IDL field-name mismatches worth documenting.
 - [x] Uses TxLINE data as the primary source
 - [x] Deployed build (devnet) using TxLINE feeds
 - [x] Working build, not a concept/wireframe
-- [x] Public repo + demo video
+- [x] Frontend deployed and linked — https://worldcup-match-vault.vercel.app
+- [ ] Public repo pushed to GitHub + linked
 - [ ] Demo video recorded and linked
-- [ ] Frontend deployed and linked

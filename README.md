@@ -5,6 +5,8 @@ cryptographically-signed score data — no oracle authority in the settlement pa
 
 Built for the **TxODDS × Superteam — Prediction Markets & Settlement (World Cup)** track.
 
+**🔗 Live demo (devnet):** https://worldcup-match-vault.vercel.app · **Program:** `E5ffcawirq6hVse98NJVDGQ4RSkkNAYWzN2RNoRAikzJ`
+
 Users stake SOL on a match outcome (Home / Draw / Away). When the match is final, **anyone** can
 submit TxLINE's three-stage Merkle proof of the score, and the market settles **only if TxODDS's own
 on-chain program (`validate_stat`) confirms it** via a Cross-Program Invocation. Winners claim a
