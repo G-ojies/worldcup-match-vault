@@ -7,6 +7,8 @@ Built for the **TxODDS × Superteam — Prediction Markets & Settlement (World C
 
 **🔗 Live demo (devnet):** https://worldcup-match-vault.vercel.app · **Program:** `E5ffcawirq6hVse98NJVDGQ4RSkkNAYWzN2RNoRAikzJ`
 
+![Verifiable Resolution — the on-chain Merkle-proof receipt for a real settled match: Netherlands 1–1 Morocco → Draw, verified against TxODDS's signed root via a validate_stat CPI, no oracle authority.](docs/assets/proof-receipt.png)
+
 Users stake SOL on a match outcome (Home / Draw / Away). When the match is final, **anyone** can
 submit TxLINE's three-stage Merkle proof of the score, and the market settles **only if TxODDS's own
 on-chain program (`validate_stat`) confirms it** via a Cross-Program Invocation. Winners claim a
