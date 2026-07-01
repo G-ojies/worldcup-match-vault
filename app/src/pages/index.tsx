@@ -20,7 +20,7 @@ export default function Home() {
     <>
       <Head>
         <title>GreYat WorldCup Analytics</title>
-        <meta name="description" content="On-chain World Cup prediction markets on Solana" />
+        <meta name="description" content="Onchain World Cup prediction markets on Solana" />
       </Head>
 
       <Header />
@@ -29,14 +29,14 @@ export default function Home() {
         <section className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-turf-500/25 bg-turf-500/10 px-2.5 py-0.5 text-[11px] font-medium text-turf-400">
-              ◈ Settled by on-chain Merkle proof — no oracle
+              ◈ Settled by onchain Merkle proof no oracle
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Prediction markets
             </h1>
             <p className="mt-1 max-w-xl text-sm text-white/50">
               Bet SOL on World Cup outcomes. Markets settle trustlessly from
-              TxLINE’s signed score data, verified against TxODDS’ on-chain Merkle
+              TxLINE’s signed score data, verified against TxODDS’ onchain Merkle
               root — winners claim a proportional share of the pools.
             </p>
           </div>
