@@ -1,7 +1,7 @@
 /**
  * TxLINE devnet access bootstrap.
  *
- * Flow (free World Cup tier — no TxL purchase needed):
+ * Flow (free World Cup tier no TxL purchase needed):
  *   1. POST  {apiOrigin}/auth/guest/start            -> guest JWT
  *   2. on-chain subscribe(serviceLevelId, weeks)     -> txSig
  *   3. POST  {apiOrigin}/api/token/activate          -> apiToken

@@ -1,5 +1,5 @@
 /**
- * Trustless settlement helpers — mirror the proven devnet e2e
+ * Trustless settlement helpers mirror the proven devnet e2e
  * (`txline/src/devnet-trustless-e2e.ts`) translated to the app's
  * `@anchor-lang/core` Program client. No oracle authority is involved:
  * the proof is verified on-chain against TxLINE's daily-scores Merkle root.

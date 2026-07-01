@@ -1,4 +1,4 @@
-/** Browser TxLINE client — talks to our Next.js proxy routes (no secrets here). */
+/** Browser TxLINE client talks to our Next.js proxy routes (no secrets here). */
 import type { FixtureRecord, ScoreUpdate, StatValidation } from "./txlineTypes";
 
 async function getJson<T>(url: string): Promise<T> {

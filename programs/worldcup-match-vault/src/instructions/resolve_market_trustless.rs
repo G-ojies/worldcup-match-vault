@@ -24,7 +24,7 @@ use crate::txline_cpi::{
 /// A liar cannot settle: a false claim makes `validate_stat` return `false`.
 #[derive(Accounts)]
 pub struct ResolveMarketTrustless<'info> {
-    /// Permissionless — anyone can settle once a valid proof exists.
+    /// Permissionless anyone can settle once a valid proof exists.
     pub resolver: Signer<'info>,
 
     #[account(

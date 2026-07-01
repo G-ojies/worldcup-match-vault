@@ -3,7 +3,7 @@ import { txlineGet } from "@/lib/txlineServer";
 
 /**
  * GET /api/txline/stat-validation?fixtureId=&seq=&statKey=&statKey2=
- * Returns the three-stage Merkle proof for one/two score statistics — the
+ * Returns the three-stage Merkle proof for one/two score statistics the
  * payload fed into the on-chain `validate_stat` settlement.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

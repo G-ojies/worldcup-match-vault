@@ -53,7 +53,7 @@ pub mod worldcup_match_vault {
     }
 
     /// Trustless path: settle the market from a TxLINE `validate_stat` Merkle
-    /// proof of the final goals. No oracle authority — anyone can submit the
+    /// proof of the final goals. No oracle authority anyone can submit the
     /// proof and the market settles only if TxLINE's program confirms it.
     pub fn resolve_market_trustless(
         ctx: Context<ResolveMarketTrustless>,

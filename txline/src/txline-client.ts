@@ -1,5 +1,5 @@
 /**
- * TxLINE devnet client — authed REST + SSE access to TxODDS World Cup data.
+ * TxLINE devnet client authed REST + SSE access to TxODDS World Cup data.
  *
  * Loads ./credentials.json (written by bootstrap-access.ts) and attaches the
  * two required auth headers to every request:

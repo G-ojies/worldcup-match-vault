@@ -5,7 +5,7 @@
  *   create_market (bound to TxLINE fixture 18172280, Netherlands 1-1 Morocco)
  *   -> place_bet (Draw = winner, Home = loser) from two funded wallets
  *   -> resolve_market_trustless: fetch the live 3-stage Merkle proof, CPI into
- *      TxLINE validate_stat — settles to Draw with NO oracle authority
+ *      TxLINE validate_stat settles to Draw with NO oracle authority
  *   -> claim_payout for the Draw bettor.
  *
  * Run: npm run e2e   (from the txline/ package)
@@ -221,7 +221,7 @@ async function main() {
   log(`    Draw bettor balance ${sol(before)} -> ${sol(after)} SOL  (+${sol(after - before)})`);
   if (after <= before) throw new Error("claim did not increase balance");
 
-  log(`\n✅ TRUSTLESS SETTLEMENT END-TO-END ON DEVNET — settled by TxLINE Merkle proof, no oracle.`);
+  log(`\n✅ TRUSTLESS SETTLEMENT END-TO-END ON DEVNET settled by TxLINE Merkle proof, no oracle.`);
   log(`\nSIGNATURES:`);
   log(`  create_market            ${createSig}`);
   log(`  place_bet Draw           ${drawSig}`);

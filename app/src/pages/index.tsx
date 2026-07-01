@@ -37,7 +37,7 @@ export default function Home() {
             <p className="mt-1 max-w-xl text-sm text-white/50">
               Bet SOL on World Cup outcomes. Markets settle trustlessly from
               TxLINE’s signed score data, verified against TxODDS’ on-chain Merkle
-              root — winners claim a proportional share of the pools.
+              root winners claim a proportional share of the pools.
             </p>
           </div>
           {connected && isAdmin && (

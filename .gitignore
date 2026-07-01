@@ -7,7 +7,7 @@ test-ledger
 .yarn
 .surfpool
 
-# secrets / local env — never commit (public repo)
+# secrets / local env never commit (public repo)
 **/.env
 **/.env.local
 **/.env*.local

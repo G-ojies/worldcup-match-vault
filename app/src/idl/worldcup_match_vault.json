@@ -399,7 +399,7 @@
       "name": "resolve_market_trustless",
       "docs": [
         "Trustless path: settle the market from a TxLINE `validate_stat` Merkle",
-        "proof of the final goals. No oracle authority — anyone can submit the",
+        "proof of the final goals. No oracle authority anyone can submit the",
         "proof and the market settles only if TxLINE's program confirms it."
       ],
       "discriminator": [
@@ -416,7 +416,7 @@
         {
           "name": "resolver",
           "docs": [
-            "Permissionless — anyone can settle once a valid proof exists."
+            "Permissionless anyone can settle once a valid proof exists."
           ],
           "signer": true
         },
@@ -700,7 +700,7 @@
       "docs": [
         "A single bettor's stake on one market.",
         "",
-        "PDA: [\"bet\", market, bettor] — one bet account per (market, wallet) pair."
+        "PDA: [\"bet\", market, bettor] one bet account per (market, wallet) pair."
       ],
       "type": {
         "kind": "struct",
@@ -945,7 +945,7 @@
       "name": "MarketResolvedTrustless",
       "docs": [
         "Emitted when a market is settled trustlessly from a TxLINE `validate_stat`",
-        "Merkle proof — no oracle authority involved."
+        "Merkle proof no oracle authority involved."
       ],
       "type": {
         "kind": "struct",

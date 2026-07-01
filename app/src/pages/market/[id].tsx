@@ -148,7 +148,7 @@ export default function MarketDetail() {
               )}
             </div>
 
-            {/* Verifiable resolution — the centerpiece */}
+            {/* Verifiable resolution the centerpiece */}
             {showResolution && (
               <VerifiableResolution market={market} onResolved={reload} />
             )}
@@ -176,7 +176,7 @@ export default function MarketDetail() {
                       TxLINE fixture #{market.fixtureId}
                     </span>
                     . When the match is final, anyone can settle it by submitting
-                    TxLINE’s signed score proof — the program verifies the goals
+                    TxLINE’s signed score proof the program verifies the goals
                     against TxODDS’ on-chain Merkle root with{" "}
                     <span className="text-turf-400">no trusted oracle</span>. Payouts
                     use live pool ratios at settlement, minus a 3% protocol fee.

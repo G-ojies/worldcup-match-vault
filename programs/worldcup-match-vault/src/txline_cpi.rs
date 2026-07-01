@@ -5,7 +5,7 @@
 //! two statistics) against TxLINE's daily Merkle root of signed scores, anchored
 //! on-chain by TxODDS. It returns a `bool`: whether the supplied `predicate`
 //! holds for the *Merkle-proven* stat value. Because the proof is verified
-//! against TxODDS's own on-chain root, the caller cannot forge a result — there
+//! against TxODDS's own on-chain root, the caller cannot forge a result there
 //! is **no trusted oracle authority** in the settlement path, only cryptography.
 //!
 //! These structs mirror the TxLINE devnet IDL (`txoracle` v1.5.2) byte-for-byte
@@ -22,7 +22,7 @@ use anchor_lang::solana_program::{
 /// Anchor discriminator for `validate_stat` (from the TxLINE IDL).
 pub const VALIDATE_STAT_DISCRIMINATOR: [u8; 8] = [107, 197, 232, 90, 191, 136, 105, 185];
 
-/// TxLINE program id — devnet (`6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`).
+/// TxLINE program id devnet (`6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`).
 /// (Mainnet: `9ExbZjAapQww1vfcisDmrngPinHTEfpjYRWMunJgcKaA`.)
 pub const TXLINE_PROGRAM_ID: Pubkey = Pubkey::new_from_array([
     86, 117, 159, 44, 144, 95, 120, 96, 200, 99, 119, 20, 191, 36, 145, 48, 157, 192, 113, 129,
@@ -102,8 +102,8 @@ pub struct ValidateStatArgs {
 
 /// CPI into TxLINE `validate_stat` and decode the returned bool.
 ///
-/// * `daily_scores_roots` — TxLINE's `["daily_scores_roots", epoch_day]` PDA.
-/// * `txline_program` — the TxLINE program account (must equal [`TXLINE_PROGRAM_ID`]).
+/// * `daily_scores_roots` TxLINE's `["daily_scores_roots", epoch_day]` PDA.
+/// * `txline_program` the TxLINE program account (must equal [`TXLINE_PROGRAM_ID`]).
 ///
 /// Returns `Ok(true)` iff the Merkle-proven stat satisfies `args.predicate`.
 pub fn validate_stat_cpi<'a>(

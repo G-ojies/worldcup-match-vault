@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     let data: any;
     if (mode === "historical") {
-      // historical replays as text/event-stream — parse `data:` lines to an array.
+      // historical replays as text/event-stream parse `data:` lines to an array.
       data = await txlineGetSseArray(`/api/scores/historical/${fixtureId}`);
     } else if (mode === "updates") {
       data = await txlineGet(`/api/scores/updates/${fixtureId}`);

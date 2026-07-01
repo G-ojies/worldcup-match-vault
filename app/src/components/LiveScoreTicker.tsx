@@ -62,7 +62,7 @@ export default function LiveScoreTicker({ fixtureId }: { fixtureId: number }) {
       ? "Listening for live updates…"
       : state === "error"
       ? "Live feed unavailable"
-      : "No live scores — match has finished";
+      : "No live scores match has finished";
 
   return (
     <div className="flex items-center gap-2 text-xs text-white/45">

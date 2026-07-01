@@ -66,7 +66,7 @@ export default function BetForm({
         s.includes("already in use")
           ? "You already have a bet on this market."
           : s.includes("BetAfterMatchStart")
-          ? "Betting is closed — the match has started."
+          ? "Betting is closed the match has started."
           : s.slice(0, 160)
       );
     } finally {

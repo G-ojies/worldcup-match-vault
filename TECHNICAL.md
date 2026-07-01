@@ -1,8 +1,8 @@
-# GreYat WorldCup Analytics — Technical Documentation
+# GreYat WorldCup Analytics Technical Documentation
 
-**Track:** TxODDS × Superteam — Prediction Markets & Settlement (World Cup)
+**Track:** TxODDS × Superteam Prediction Markets & Settlement (World Cup)
 **One-liner:** On-chain World Cup prediction markets on Solana that settle **trustlessly** from
-TxLINE's cryptographically-signed score data — no oracle authority in the settlement path.
+TxLINE's cryptographically-signed score data no oracle authority in the settlement path.
 
 ---
 
@@ -30,12 +30,12 @@ create_market ───┘        (anyone, with a            (verifies proof aga
 
 `resolve_market_trustless`:
 1. **Binds** the proof to this market's `fixture_id`, the configured home/away goal stat-keys, and
-   the goal period — so a resolver can't submit another match's proof or the wrong statistic.
-2. **Enforces finality** — refuses to settle before `settle_not_before` (kickoff + full time) and
+   the goal period so a resolver can't submit another match's proof or the wrong statistic.
+2. **Enforces finality** refuses to settle before `settle_not_before` (kickoff + full time) and
    requires the proven scores batch's `max_timestamp` to reach full time (no settling on an in-play
    score).
 3. **Derives the predicate from the claimed outcome** (`home − away > 0` ⇒ Home, `< 0` ⇒ Away,
-   `= 0` ⇒ Draw) using `validate_stat`'s two-stat `Subtract` expression — so the claimed outcome is
+   `= 0` ⇒ Draw) using `validate_stat`'s two-stat `Subtract` expression so the claimed outcome is
    bound to what the proof actually shows.
 4. **CPIs `validate_stat`** and reads the returned `bool` via `get_return_data`; the market settles
    only on `true`.
@@ -46,7 +46,7 @@ labelled fallback; the demo uses the trustless path.
 
 ### Proven live on devnet
 
-Validated end-to-end against real data: **fixture `18172280` — Netherlands 1‑1 Morocco (World Cup)**,
+Validated end-to-end against real data: **fixture `18172280` Netherlands 1‑1 Morocco (World Cup)**,
 seq `1427`. `validate_stat` returned `GreaterThan=false, LessThan=false, EqualTo=true` ⇒ **Draw**,
 matching the real result, confirmed against TxLINE's signed `daily_scores_roots` PDA.
 
@@ -69,10 +69,10 @@ Reproduce: `cd txline && npm run e2e`.
 | `POST /auth/guest/start` | Guest JWT for the access bootstrap |
 | on-chain `subscribe(serviceLevelId=1, weeks=4)` | Free World Cup tier subscription (devnet) |
 | `POST /api/token/activate` | Activates the long-lived `X-Api-Token` |
-| `GET /api/fixtures/snapshot` | Market creation — lists World Cup fixtures, `Participant1IsHome` → home/away goal keys |
+| `GET /api/fixtures/snapshot` | Market creation lists World Cup fixtures, `Participant1IsHome` → home/away goal keys |
 | `GET /api/scores/snapshot/{fixtureId}` | Live/last score + event actions for the market UI |
 | `GET /api/scores/historical/{fixtureId}` | Final score + the `seq` of `game_finalised` for settlement |
-| `GET /api/scores/stat-validation` | **The settlement input** — three-stage Merkle proof for the home & away goal stats |
+| `GET /api/scores/stat-validation` | **The settlement input** three-stage Merkle proof for the home & away goal stats |
 | `GET /api/scores/stream`, `/api/odds/stream` | SSE live feed (proxied server-side; powers the live ticker) |
 | on-chain `validate_stat` (CPI) | Trustless settlement check against `daily_scores_roots` |
 
