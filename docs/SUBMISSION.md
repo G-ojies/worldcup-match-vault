@@ -5,7 +5,7 @@ Fill the bracketed links before submitting.
 
 ---
 
-**Project name:** WorldCup Match Vault
+**Project name:** GreYat WorldCup Analytics
 
 **One-line pitch:** On-chain World Cup prediction markets on Solana that settle trustlessly from
 TxLINE's signed score data — markets resolve via a CPI into TxODDS's `validate_stat`, with no oracle
@@ -27,7 +27,7 @@ authority.
 
 ## Brief technical documentation
 
-**Core idea.** Most prediction markets resolve by trusting an off-chain oracle. WorldCup Match Vault
+**Core idea.** Most prediction markets resolve by trusting an off-chain oracle. GreYat WorldCup Analytics
 settles by *proving* the final score against TxODDS's own on-chain Merkle root. The settlement
 instruction `resolve_market_trustless` CPIs into TxLINE's `validate_stat`, reads the returned boolean
 via `get_return_data`, and releases escrowed SOL only if the proof verifies. Resolution is

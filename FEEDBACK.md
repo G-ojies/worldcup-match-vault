@@ -1,6 +1,6 @@
 # TxLINE API — Builder Feedback
 
-Submitted as part of the WorldCup Match Vault entry. Honest notes from integrating TxLINE as the
+Submitted as part of the GreYat WorldCup Analytics entry. Honest notes from integrating TxLINE as the
 primary data source and settlement layer.
 
 ## What worked well

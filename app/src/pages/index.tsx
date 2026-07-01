@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>WorldCup Match Vault</title>
+        <title>GreYat WorldCup Analytics</title>
         <meta name="description" content="On-chain World Cup prediction markets on Solana" />
       </Head>
 

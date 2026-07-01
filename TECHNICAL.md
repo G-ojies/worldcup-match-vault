@@ -1,4 +1,4 @@
-# WorldCup Match Vault — Technical Documentation
+# GreYat WorldCup Analytics — Technical Documentation
 
 **Track:** TxODDS × Superteam — Prediction Markets & Settlement (World Cup)
 **One-liner:** On-chain World Cup prediction markets on Solana that settle **trustlessly** from

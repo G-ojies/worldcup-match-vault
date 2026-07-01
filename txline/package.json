@@ -6,7 +6,6 @@
   "type": "commonjs",
   "scripts": {
     "bootstrap": "ts-node src/bootstrap-access.ts",
-    "verify": "ts-node src/verify-access.ts",
     "probe": "ts-node src/probe-validation.ts",
     "e2e": "ts-node src/devnet-trustless-e2e.ts",
     "seed": "ts-node src/seed-demo-markets.ts"

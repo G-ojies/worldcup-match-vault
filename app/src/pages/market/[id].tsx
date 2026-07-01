@@ -44,7 +44,7 @@ export default function MarketDetail() {
     <>
       <Head>
         <title>
-          {market ? `${market.homeTeam} vs ${market.awayTeam}` : "Market"} · Match Vault
+          {market ? `${market.homeTeam} vs ${market.awayTeam}` : "Market"} · GreYat WorldCup Analytics
         </title>
       </Head>
       <Header />

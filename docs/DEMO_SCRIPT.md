@@ -1,4 +1,4 @@
-# Demo Video Script — WorldCup Match Vault (≤ 5:00)
+# Demo Video Script — GreYat WorldCup Analytics (≤ 5:00)
 
 Goal: prove a **working, deployed** build and make the **trustless settlement** unmistakable. The demo
 video is the primary judging artifact, so lead with the differentiator and show real on-chain proof.

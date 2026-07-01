@@ -17,7 +17,7 @@ export default function Header() {
             ⚽
           </span>
           <div className="leading-tight">
-            <div className="text-sm font-bold text-white">WorldCup Match Vault</div>
+            <div className="text-sm font-bold text-white">GreYat WorldCup Analytics</div>
             <div className="text-[10px] uppercase tracking-widest text-white/35">
               Verifiable prediction markets
             </div>

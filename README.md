@@ -1,4 +1,4 @@
-# ⚽ WorldCup Match Vault
+# ⚽ GreYat WorldCup Analytics
 
 **On-chain World Cup prediction markets on Solana that settle _trustlessly_ from TxLINE's
 cryptographically-signed score data — no oracle authority in the settlement path.**
@@ -26,7 +26,7 @@ result — the only trust anchor is TxODDS's signed Merkle root.
 The track explicitly rewards **Custom On-Chain Settlement Engines** that CPI into `validate_stat`.
 Most prediction markets trust an off-chain oracle to push the result. This one doesn't:
 
-| | Typical oracle market | WorldCup Match Vault |
+| | Typical oracle market | GreYat WorldCup Analytics |
 | --- | --- | --- |
 | Who resolves | A trusted `oracle_authority` key | **Anyone**, permissionlessly |
 | Trust assumption | "the oracle is honest" | **Cryptographic** — TxODDS's signed Merkle root |
