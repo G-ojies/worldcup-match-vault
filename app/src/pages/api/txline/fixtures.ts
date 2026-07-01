@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { txlineGet } from "@/lib/txlineServer";
 
-/** GET /api/txline/fixtures?competitionId=123 latest fixtures snapshot. */
+/** GET /api/txline/fixtures?competitionId=123: latest fixtures snapshot. */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { competitionId } = req.query;

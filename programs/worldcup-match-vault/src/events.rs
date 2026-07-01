@@ -29,7 +29,7 @@ pub struct MarketResolved {
 }
 
 /// Emitted when a market is settled trustlessly from a TxLINE `validate_stat`
-/// Merkle proof no oracle authority involved.
+/// Merkle proof. No oracle authority involved.
 #[event]
 pub struct MarketResolvedTrustless {
     pub market: Pubkey,

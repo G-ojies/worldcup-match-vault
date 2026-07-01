@@ -1,4 +1,4 @@
-# TxLINE / TxODDS Oracle Settlement-Engine Integration Reference
+# TxLINE / TxODDS Oracle: Settlement-Engine Integration Reference
 
 Distilled from `txline-llms-full.md` (full API docs dump). This is the wiring reference for
 fetching data, streaming, and converting `stat-validation` proof JSON into on-chain
@@ -7,8 +7,8 @@ fetching data, streaming, and converting `stat-validation` proof JSON into on-ch
 > Casing note: the **REST/JSON** layer uses mixed casing (PascalCase for fixture records like
 > `FixtureId`, camelCase for proof JSON like `eventStatsSubTreeRoot`). The **on-chain Anchor**
 > types use `snake_case` in the raw IDL and `camelCase` in the generated TS `Txoracle` type.
-> Field-name mismatches between JSON keys and Anchor args are called out explicitly below 
-> they are the main footgun.
+> Field-name mismatches between JSON keys and Anchor args are called out explicitly below.
+> They are the main footgun.
 
 ---
 
@@ -77,9 +77,9 @@ leagues array; custom-matrix → requested league IDs). The whole activate inten
 
 ### Fixtures
 
-**`GET /api/fixtures/snapshot`** latest fixtures snapshot, optionally starting at or within 30 days
+**`GET /api/fixtures/snapshot`**: latest fixtures snapshot, optionally starting at or within 30 days
 after a given epoch day.
-- Query params: `competitionId` (int, optional e.g. `500005` = NCAA Division I FBS). The "epochDay
+- Query params: `competitionId` (int, optional, e.g. `500005` = NCAA Division I FBS). The "epochDay
   variant" is the same endpoint with an optional epoch-day query param (the docs title it "optionally
   starting at or within 30 days after a given epoch day"); **exact epochDay query param name = NOT IN
   DOCS** (only the `competitionId` param is shown in examples).
@@ -111,15 +111,15 @@ const fixturesResponse = await httpClient.get("/api/fixtures/snapshot", {
 const allFixtures = (await httpClient.get("/api/fixtures/snapshot")).data; // all competitions
 ```
 
-**`GET /api/fixtures/updates/{epochDay}/{hourOfDay}`** all fixture updates for fixtures on a given
-day/hour. Path params: `epochDay` (int), `hourOfDay` (0–23). Response: **NOT IN DOCS (field-level)**.
+**`GET /api/fixtures/updates/{epochDay}/{hourOfDay}`**: all fixture updates for fixtures on a given
+day/hour. Path params: `epochDay` (int), `hourOfDay` (0-23). Response: **NOT IN DOCS (field-level)**.
 
-**`GET /api/fixtures/validation`** (Merkle proof for ONE fixture update) returns the Merkle proof
+**`GET /api/fixtures/validation`** (Merkle proof for ONE fixture update): returns the Merkle proof
 (branch hashes up to, not incl., the on-chain root) for a single fixture update. Use with the fixture
 record for on-chain fixture validation. Query params + response schema: **NOT IN DOCS (field-level)**;
 on-chain consumer types are `fixture`/`fixtureBatchSummary` + `proofNode[]` (see §6).
 
-**`GET /api/fixtures/batch-validation`** (Merkle proof for an entire hourly batch) returns the hourly
+**`GET /api/fixtures/batch-validation`** (Merkle proof for an entire hourly batch): returns the hourly
 batch metadata (incl. its final Merkle root) plus a Merkle proof to verify the batch's claimed state
 against a higher-level commitment. Query params + response: **NOT IN DOCS (field-level)**. On-chain type:
 `fixtureBatchSummary { fixtureId:i64, competitionId:i32, competition:string, updateStats:FixtureUpdateStats, updateSubTreeRoot:[u8;32] }`.
@@ -129,8 +129,8 @@ Fixtures PDA uses a 10-day window (see §5).
 
 ### Odds
 
-**`GET /api/odds/snapshot/{fixtureId}`** latest odds for each unique market line for a fixture.
-- Path: `fixtureId`. Query: `asOf` (ms epoch, optional historical point-in-time snapshot; without it,
+**`GET /api/odds/snapshot/{fixtureId}`**: latest odds for each unique market line for a fixture.
+- Path: `fixtureId`. Query: `asOf` (ms epoch, optional, historical point-in-time snapshot; without it,
   returns the current live snapshot if within the current 5-minute interval).
 - Returns: array of odds records. Field names from the IDL `odds` record struct (camelCase):
 
@@ -149,33 +149,33 @@ Fixtures PDA uses a 10-day window (see §5).
 | `priceNames`       | vec\<string>      |
 | `prices`           | vec\<i32>         |
 
-**`GET /api/odds/updates/{fixtureId}`** all live odds offers for a fixture from the current in-memory
+**`GET /api/odds/updates/{fixtureId}`**: all live odds offers for a fixture from the current in-memory
 5-minute cache. Path: `fixtureId`. Response: array of odds records (same shape as above).
 
-**`GET /api/odds/updates/{epochDay}/{hourOfDay}/{interval}`** all odds updates from a specific historical
-5-minute interval. Path: `epochDay`, `hourOfDay` (0–23), `interval` (0–11, = floor(minute/5)).
+**`GET /api/odds/updates/{epochDay}/{hourOfDay}/{interval}`**: all odds updates from a specific historical
+5-minute interval. Path: `epochDay`, `hourOfDay` (0-23), `interval` (0-11, = floor(minute/5)).
 
-**`GET /api/odds/validation`** Merkle proof for a single odds update identified by its unique
+**`GET /api/odds/validation`**: Merkle proof for a single odds update identified by its unique
 `messageId`. Query: `messageId` (string). Returns proof branch hashes. On-chain consumer types:
 `odds` record + `oddsBatchSummary { fixtureId:i64, updateStats:OddsUpdateStats, oddsSubTreeRoot:[u8;32] }`
 + `proofNode[]`. Field-level response: **NOT IN DOCS**.
 
 ### Scores
 
-**`GET /api/scores/snapshot/{fixtureId}`** snapshots for each action in the latest score events for a
+**`GET /api/scores/snapshot/{fixtureId}`**: snapshots for each action in the latest score events for a
 fixture. Path: `fixtureId`. Query: `asOf` (ms epoch, optional, e.g. `?asOf=${Date.now()}`). Returns: array.
 Per-element field-level schema: **NOT IN DOCS** (the score-update record JSON keys known from the historical
-example are `seq`, `ts`, `gameState` see below).
+example are `seq`, `ts`, `gameState`, see below).
 
-**`GET /api/scores/updates/{fixtureId}`** score updates for a fixture within the current 5-minute
+**`GET /api/scores/updates/{fixtureId}`**: score updates for a fixture within the current 5-minute
 interval (incl. live data if present). Path: `fixtureId`. Returns array.
 
-**`GET /api/scores/updates/{epochDay}/{hourOfDay}/{interval}`** all score updates from a specific
+**`GET /api/scores/updates/{epochDay}/{hourOfDay}/{interval}`**: all score updates from a specific
 historical 5-minute interval (NO live data). Path: `epochDay`, `hourOfDay`, `interval`.
 Interval computation (verbatim): `interval = Math.floor(targetTime.getUTCMinutes() / 5)`,
 `hourOfDay = targetTime.getUTCHours()`, `epochDay = Math.floor(targetTime.getTime() / 86400000)`.
 
-**`GET /api/scores/historical/{fixtureId}`** FULL sequence of score updates for a fixture. Only returns
+**`GET /api/scores/historical/{fixtureId}`**: FULL sequence of score updates for a fixture. Only returns
 data when the fixture's start time is between **two weeks and six hours** in the past. Path: `fixtureId`.
 Returns array; each element has at least `seq`, `ts`, `gameState` (verbatim example):
 ```typescript
@@ -187,17 +187,17 @@ There is no documented separate "5-min-interval variant" of `historical`; the 5-
 served by `GET /api/scores/updates/{fixtureId}` (current 5-min interval) and
 `GET /api/scores/updates/{epochDay}/{hourOfDay}/{interval}` (historical 5-min interval).
 
-**`GET /api/scores/stat-validation`** the three-stage Merkle proof. **See §3 (most important).**
+**`GET /api/scores/stat-validation`**: the three-stage Merkle proof. **See §3 (most important).**
 
 ### Purchase (optional)
 
-**`POST /api/guest/purchase/quote`** partially-signed Solana tx to buy TxLINE. Body: `buyerPubkey`,
+**`POST /api/guest/purchase/quote`**: partially-signed Solana tx to buy TxLINE. Body: `buyerPubkey`,
 required TxLINE whole-unit amount. Base rate 1,000 TxLINE = 1 USDT; premium 0%. Buyer needs a USDT ATA +
 balance. Response includes cost breakdown + tx payload to sign. Field-level schema: **NOT IN DOCS**.
 
 ---
 
-## 3. `GET /api/scores/stat-validation` Three-Stage Merkle Proof (CRITICAL)
+## 3. `GET /api/scores/stat-validation`: Three-Stage Merkle Proof (CRITICAL)
 
 Proves one or two statistics inside a single score update against the on-chain main batch root.
 Three-level Merkle hierarchy: main batch → per-fixture summary (root of that fixture's events sub-tree) →
@@ -263,18 +263,18 @@ BinaryExpression   = enum { Add, Subtract }
 Each `ProofNode` JSON element = `{ hash: <base64|0x-hex|number[]>, isRightSibling: boolean }`
 → `{ hash: toBytes32(hash), isRightSibling }`.
 
-> ⚠ MAPPING GOTCHAS flag these when wiring:
+> ⚠ MAPPING GOTCHAS. Flag these when wiring:
 > 1. JSON `eventStatsSubTreeRoot` (note the extra "Stats") feeds the Anchor field
->    `events_sub_tree_root` / `eventsSubTreeRoot`. The names are NOT identical do not search-replace.
+>    `events_sub_tree_root` / `eventsSubTreeRoot`. The names are NOT identical. Do not search-replace.
 > 2. JSON `subTreeProof` feeds the arg named `fixture_proof`. Name mismatch is intentional per docs.
 > 3. For two-stat, `stat_b` uses `eventStatRoot` (the SAME key as `stat_a`), but `statProof2` /
 >    `statToProve2`. This is consistent because both stats live in the same score-update event, so they
->    share one `event_stat_root` but it looks like a typo if you expect `eventStatRoot2`.
+>    share one `event_stat_root`, but it looks like a typo if you expect `eventStatRoot2`.
 > 4. `statToProve` / `statToProve2` are passed to Anchor untransformed, so the JSON objects must already
 >    be `{ key:u32, value:i32, period:i32 }`. The exact JSON field names inside `statToProve` are not
->    spelled out in the dump beyond this passthrough assume `{ key, value, period }` per `ScoreStat`.
+>    spelled out in the dump beyond this passthrough. Assume `{ key, value, period }` per `ScoreStat`.
 > 5. Arg ORDER for `validate_stat` is `(ts, fixture_summary, fixture_proof, main_tree_proof, predicate,
->    stat_a, stat_b, op)`. NOTE: the related `auditTradeResult` instruction takes a DIFFERENT order 
+>    stat_a, stat_b, op)`. NOTE: the related `auditTradeResult` instruction takes a DIFFERENT order:
 >    `(terms, fixtureSummary, mainTreeProof, fixtureProof, statA, statB, ts)` with mainTreeProof/fixtureProof
 >    SWAPPED and `ts` LAST. Don't copy arg order between the two.
 
@@ -285,7 +285,7 @@ Account required by `validate_stat`: `daily_scores_merkle_roots` (the daily-scor
 
 ## 4. SSE Streams
 
-**`GET /api/odds/stream`** and **`GET /api/scores/stream`** long-lived Server-Sent Events.
+**`GET /api/odds/stream`** and **`GET /api/scores/stream`**: long-lived Server-Sent Events.
 
 Required headers:
 ```
@@ -294,15 +294,15 @@ X-Api-Token: <apiToken>
 Accept: text/event-stream
 Cache-Control: no-cache
 ```
-Optional: `Accept-Encoding: gzip` (reduces bandwidth ~70–80%; you must `gunzipSync()` each chunk via
+Optional: `Accept-Encoding: gzip` (reduces bandwidth ~70-80%; you must `gunzipSync()` each chunk via
 Node `zlib` before decoding).
 
 Event types emitted by BOTH streams:
-1. **Data message** has SSE `id` in the format `timestamp:index`; `data` is a JSON object for a single
+1. **Data message**: has SSE `id` in the format `timestamp:index`; `data` is a JSON object for a single
    record (an Odds record on `/odds/stream`; a Scores record on `/scores/stream`). The `data` JSON schema
    for the odds stream = the `odds` record in §2. The scores-record JSON schema is **NOT IN DOCS
    (field-level)** beyond `seq` / `ts` / `gameState`.
-2. **Heartbeat** SSE `event: heartbeat`; `data` may be e.g. `{"Ts": 12345}`.
+2. **Heartbeat**: SSE `event: heartbeat`; `data` may be e.g. `{"Ts": 12345}`.
 
 Consume with `message.event ?? "message"` and `JSON.parse(message.data)`.
 
@@ -313,7 +313,7 @@ Consume with `message.event ?? "message"` and `JSON.parse(message.data)`.
 `epochDay` (for daily PDAs) = `Math.floor(<ms timestamp> / (24 * 60 * 60 * 1000))`. In the validation
 example it is derived from `validation.summary.updateStats.minTimestamp` (which is in **ms**).
 
-Daily Scores Merkle Roots PDA (used by `validate_stat`) **seeds = `"daily_scores_roots"` + epochDay as
+Daily Scores Merkle Roots PDA (used by `validate_stat`): **seeds = `"daily_scores_roots"` + epochDay as
 2-byte little-endian** (confirmed verbatim):
 ```typescript
 const epochDay = Math.floor(targetTs / (24 * 60 * 60 * 1000));   // targetTs = minTimestamp (ms)
@@ -634,9 +634,9 @@ for await (const message of readSseMessages(streamResponse)) {
 | TXCS | 18 | TX Coverage Suspended          |
 | P    | 19 | Postponed                      |
 
-### Stat key encoding `(period * 1000) + base_key`
+### Stat key encoding: `(period * 1000) + base_key`
 
-Base keys 1–8 (full-game totals):
+Base keys 1-8 (full-game totals):
 
 | Key | Statistic                        |
 | --- | -------------------------------- |
@@ -666,10 +666,10 @@ Period multipliers (added to base key):
 
 ### Other feeds (for reference; settlement engine is soccer/World Cup)
 
-- **Basketball** stat encoding uses `(half*1000 OR quarter*10000) + base_key`; full-game keys 1–36; phase
+- **Basketball** stat encoding uses `(half*1000 OR quarter*10000) + base_key`; full-game keys 1-36; phase
   IDs include NS=1, Q1=2…Q4=8, HT=5, F=9, OT=11, H1=19, H2=20 (NCAA). Period adds: H1+1000, H2+2000,
   Q1+10000, Q2+20000, Q3+30000, Q4+40000.
-- **American Football** stat encoding `(half*1000 OR quarter*10000) + base_key`; full-game keys 1–16
+- **American Football** stat encoding `(half*1000 OR quarter*10000) + base_key`; full-game keys 1-16
   (1/2 = P1/P2 Total Score, 3/4 = Touchdowns, 5/6 = Field Goals, 7/8 = 1pt Conversions, …); standard
   phases NS=1…F=9, plus overtime phases OT1=1011, OB1=1012, OT2=2011, OB2=2012 (…to OT12).
 

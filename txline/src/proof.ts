@@ -1,6 +1,6 @@
 /**
  * Convert TxLINE stat-validation proof JSON into on-chain `validate_stat` args.
- * Mapping per INTEGRATION.md §3 mind the key-name gotchas:
+ * Mapping per INTEGRATION.md §3. Mind the key-name gotchas:
  *   - JSON `subTreeProof`            -> arg `fixture_proof`
  *   - JSON `summary.eventStatsSubTreeRoot` -> `fixture_summary.eventsSubTreeRoot`
  *   - stat_b reuses `eventStatRoot` (same key as stat_a) + `statToProve2` / `statProof2`
@@ -42,7 +42,7 @@ export interface BuildOpts {
 /** A StatTerm built from the proof JSON. */
 function statTerm(statToProve: any, eventStatRoot: number[] | string, statProof: ProofNodeJson[]) {
   return {
-    statToProve, // { key:u32, value:i32, period:i32 } passed untransformed
+    statToProve, // { key:u32, value:i32, period:i32 }, passed untransformed
     eventStatRoot: toBytes32(eventStatRoot),
     statProof: toProofNodes(statProof),
   };

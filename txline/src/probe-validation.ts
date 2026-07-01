@@ -48,7 +48,7 @@ async function main() {
     chosen = { fixtureId: f.FixtureId, seq: finalUpdate.Seq, p1, p2, home1: f.Participant1IsHome };
     console.log(
       `\nfixture ${f.FixtureId}: ${f.Participant1} ${p1}-${p2} ${f.Participant2} ` +
-        `(seq ${finalUpdate.Seq}, P1IsHome=${f.Participant1IsHome}) ${f.Competition}`
+        `(seq ${finalUpdate.Seq}, P1IsHome=${f.Participant1IsHome}) - ${f.Competition}`
     );
     break;
   }
@@ -131,7 +131,7 @@ async function main() {
       ? "Draw"
       : "UNDETERMINED";
   console.log(`\nproven on-chain outcome = ${provenOutcome}; real outcome = ${realOutcome}`);
-  console.log(provenOutcome === realOutcome ? "✅ MATCH trustless settlement verified live" : "⚠️ mismatch / undetermined");
+  console.log(provenOutcome === realOutcome ? "✅ MATCH: trustless settlement verified live" : "⚠️ mismatch / undetermined");
 }
 
 main().catch((e) => {

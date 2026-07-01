@@ -37,7 +37,7 @@ export function toProofNodes(nodes: ProofNodeJson[]) {
 
 function statTerm(statToProve: any, eventStatRoot: number[] | string, statProof: ProofNodeJson[]) {
   return {
-    statToProve, // { key, value, period } passed untransformed
+    statToProve, // { key, value, period }, passed untransformed
     eventStatRoot: toBytes32(eventStatRoot),
     statProof: toProofNodes(statProof),
   };

@@ -138,7 +138,7 @@ export default function CreateMarketModal({
       const s = e?.toString() ?? "Failed to create market";
       setErr(
         s.includes("already in use")
-          ? "A market with this id already exists change the match id."
+          ? "A market with this id already exists. Change the match id."
           : s.slice(0, 220)
       );
     } finally {
@@ -174,7 +174,7 @@ export default function CreateMarketModal({
           <div>
             <h2 className="text-lg font-semibold text-white">Create market</h2>
             <p className="mt-0.5 text-xs text-white/45">
-              Bound to a live TxLINE fixture settles from its signed score data.
+              Bound to a live TxLINE fixture. Settles from its signed score data.
             </p>
           </div>
           <button

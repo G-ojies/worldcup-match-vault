@@ -29,7 +29,7 @@ In the Vercel project → Settings → Environment Variables (Production + Previ
 | `NEXT_PUBLIC_ADMIN_PUBKEY` | *(optional)* gate the create-market button | public |
 
 `txlineServer.ts` reads the `TXLINE_*` env vars first and only falls back to the local
-`credentials.json` file in dev so on Vercel the three server vars are required.
+`credentials.json` file in dev, so on Vercel the three server vars are required.
 
 ## 3. Deploy
 
@@ -42,7 +42,7 @@ vercel --prod
 Or connect the GitHub repo in the Vercel dashboard with **Root Directory = `app`** and the env vars
 above; pushes to `main` then auto-deploy.
 
-> A paid devnet RPC (Helius/Triton/QuickNode) is recommended for the public demo the public
+> A paid devnet RPC (Helius/Triton/QuickNode) is recommended for the public demo. The public
 > `api.devnet.solana.com` endpoint rate-limits under load and can make wallet reads flaky.
 
 ## Deploying the program on the public devnet RPC (rate-limit lesson)
@@ -52,7 +52,7 @@ transactions). On the public `https://api.devnet.solana.com` endpoint this relia
 `429 Too Many Requests`.
 
 **The fix that worked here: do NOT pass `--use-rpc`.** That flag forces *every* chunk-upload tx through
-the RPC; without it, chunks are sent via TPU and only blockhash/confirmation hit the RPC far lighter,
+the RPC; without it, chunks are sent via TPU and only blockhash/confirmation hit the RPC, far lighter,
 and it landed on the first clean attempt. `anchor deploy` also defaults to `--use-rpc`, which is why it
 failed; call `solana` directly instead:
 
@@ -76,5 +76,5 @@ A paid RPC (Helius/Triton/QuickNode) avoids the throttling entirely, but isn't r
 
 - `next.config.js` already sets browser fallbacks for the Node core modules some Solana deps import.
 - SSE proxy (`/api/txline/stream`) streams server-side; it works on Vercel's Node runtime. World Cup
-  fixtures are finished, so the live ticker gracefully shows "match has finished" expected.
+  fixtures are finished, so the live ticker gracefully shows "match has finished" (expected).
 - The settlement flow signs with the connected browser wallet (Phantom/Solflare/Backpack) on devnet.

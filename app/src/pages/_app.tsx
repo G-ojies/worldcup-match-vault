@@ -8,7 +8,7 @@ import { RPC_URL } from "@/lib/anchor";
 
 export default function App({ Component, pageProps }: AppProps) {
   // Phantom, Solflare, Backpack et al. register via the Wallet Standard and are
-  // auto-detected no need to bundle individual adapters.
+  // auto-detected. No need to bundle individual adapters.
   return (
     <ConnectionProvider endpoint={RPC_URL} config={{ commitment: "confirmed" }}>
       <WalletProvider wallets={[]} autoConnect>

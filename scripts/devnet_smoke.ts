@@ -69,7 +69,7 @@ async function main() {
   const program = new Program(idl, provider);
 
   console.log("════════════════════════════════════════════════════════");
-  console.log("  WorldCup Match Vault devnet smoke test");
+  console.log("  WorldCup Match Vault: devnet smoke test");
   console.log("════════════════════════════════════════════════════════");
   console.log(`  RPC:        ${RPC}`);
   console.log(`  Program:    ${PROGRAM_ID.toBase58()}`);
@@ -113,7 +113,7 @@ async function main() {
     .rpc();
   log(`create_market  (${matchId}: Brazil vs Argentina)`, sig);
 
-  // 2) place_bet x3 home 0.02, away 0.01, draw 0.01 SOL
+  // 2) place_bet x3: home 0.02, away 0.01, draw 0.01 SOL
   const bets: [Keypair, string, number][] = [
     [homeBettor, "home", 0.02],
     [awayBettor, "away", 0.01],
@@ -142,7 +142,7 @@ async function main() {
   );
   console.log(`  Vault balance: ${sol(await connection.getBalance(vault))}`);
 
-  // 3) resolve_market oracle signs, admin pays the fee
+  // 3) resolve_market: oracle signs, admin pays the fee
   sig = await program.methods
     .resolveMarket(outcomeArg("home"))
     .accountsPartial({ oracleAuthority: oracle.publicKey, market })
@@ -150,7 +150,7 @@ async function main() {
     .rpc();
   log("resolve_market (outcome: HOME)", sig);
 
-  // 4) claim_payout the home bettor (winner) claims
+  // 4) claim_payout: the home bettor (winner) claims
   const balBefore = await connection.getBalance(homeBettor.publicKey);
   sig = await program.methods
     .claimPayout()
@@ -176,7 +176,7 @@ async function main() {
   console.log("\n  Market account:");
   console.log(`     https://explorer.solana.com/address/${market.toBase58()}?cluster=devnet`);
   console.log("\n════════════════════════════════════════════════════════");
-  console.log("  ✅ Smoke test complete all 5 steps confirmed on devnet");
+  console.log("  ✅ Smoke test complete. All 5 steps confirmed on devnet");
   console.log("════════════════════════════════════════════════════════");
 }
 

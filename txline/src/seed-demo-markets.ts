@@ -1,7 +1,7 @@
 /**
  * Seed demo markets on devnet so the demo video has a full story:
- *   1) ACTIVE market  upcoming fixture, two bets (Home/Away) → shows create + betting
- *   2) FINISHED+UNSETTLED market bound to fixture 18172280, match_timestamp future
+ *   1) ACTIVE market: upcoming fixture, two bets (Home/Away) → shows create + betting
+ *   2) FINISHED+UNSETTLED market: bound to fixture 18172280, match_timestamp future
  *      (bets allowed) but settle_not_before in the past (trustless settle allowed now),
  *      Draw + Home bets, LEFT UNSETTLED so the demo can click "Settle trustlessly".
  *   3) The already-settled market from the e2e is left untouched (receipt demo).
@@ -28,7 +28,7 @@ import { TxlineClient } from "./txline-client";
 const ourIdl = require("../../target/idl/worldcup_match_vault.json");
 const RPC = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
 const OUR_PROGRAM = new PublicKey(ourIdl.address);
-const FIXTURE_LIVE = 18172280; // Netherlands 1-1 Morocco (World Cup) finished
+const FIXTURE_LIVE = 18172280; // Netherlands 1-1 Morocco (World Cup), finished
 
 const log = (...a: any[]) => console.log(...a);
 const sol = (l: number) => (l / LAMPORTS_PER_SOL).toFixed(4);
@@ -97,7 +97,7 @@ async function createMarket(
   const market = marketPda(matchId);
   const vault = vaultPda(market);
   if (await exists(connection, market)) {
-    log(`   market ${matchId} already exists skipping create`);
+    log(`   market ${matchId} already exists, skipping create`);
     return { market, vault, createSig: "(existing)" };
   }
   const prog = programFor(connection, admin);
@@ -240,7 +240,7 @@ async function main() {
     log(`    create   : ${r.createSig}`);
     r.bets.forEach((b: any) => log(`    bet ${b.outcome}: ${b.sig}`));
   }
-  log("\n✅ Demo markets seeded. Market #2 is UNSETTLED + bound to fixture 18172280 click 'Settle trustlessly' in the demo.");
+  log("\n✅ Demo markets seeded. Market #2 is UNSETTLED + bound to fixture 18172280. Click 'Settle trustlessly' in the demo.");
 }
 
 main().catch((e) => {

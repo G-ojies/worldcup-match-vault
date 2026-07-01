@@ -4,7 +4,7 @@ use crate::state::market::Outcome;
 
 /// A single bettor's stake on one market.
 ///
-/// PDA: ["bet", market, bettor] one bet account per (market, wallet) pair.
+/// PDA: ["bet", market, bettor]. One bet account per (market, wallet) pair.
 #[account]
 #[derive(InitSpace)]
 pub struct Bet {

@@ -71,7 +71,7 @@ export async function txlineGet<T = any>(pathname: string): Promise<T> {
 
 /**
  * Some TxLINE endpoints (notably `/api/scores/historical/{id}`) reply with
- * `text/event-stream` a replay of `data: {...}` lines rather than a JSON
+ * `text/event-stream`, a replay of `data: {...}` lines rather than a JSON
  * array. Read the whole body and collect each `data:` payload into an array.
  */
 export async function txlineGetSseArray<T = any>(pathname: string): Promise<T[]> {

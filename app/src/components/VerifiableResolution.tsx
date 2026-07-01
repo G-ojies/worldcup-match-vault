@@ -95,7 +95,7 @@ export default function VerifiableResolution({
         <div>
           <h3 className="text-sm font-semibold text-white">Verifiable resolution</h3>
           <p className="text-xs text-white/45">
-            Settle from TxODDS data proven on-chain, no oracle authority.
+            Settle from TxODDS data. Proven on-chain, no oracle authority.
           </p>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function VerifiableResolution({
             ) : (
               <p className="mb-4 text-sm text-white/60">
                 The match is final. Anyone can settle this market by submitting
-                TxLINE’s signed score proof the program verifies it against the
+                TxLINE’s signed score proof. The program verifies it against the
                 on-chain Merkle root.
               </p>
             )}
@@ -201,7 +201,7 @@ function ProofReceipt({
           </div>
           <div className="text-lg font-bold text-white">
             {market.homeTeam} {built.homeGoals}
-            <span className="px-2 text-white/30">–</span>
+            <span className="px-2 text-white/30">-</span>
             {built.awayGoals} {market.awayTeam}
           </div>
         </div>
@@ -265,7 +265,7 @@ function ProofReceipt({
           ✓
         </span>
         <span className="text-xs font-medium text-turf-400">
-          Verified against TxODDS on-chain Merkle root no oracle authority.
+          Verified against TxODDS on-chain Merkle root. No oracle authority.
         </span>
       </div>
 

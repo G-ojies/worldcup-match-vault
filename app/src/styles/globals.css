@@ -18,7 +18,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Wallet adapter button restyled to fit the dark theme. */
+/* Wallet adapter button: restyled to fit the dark theme. */
 .wallet-adapter-button {
   background: #10b981 !important;
   color: #04130d !important;
@@ -55,7 +55,7 @@ body {
   }
 }
 
-/* Entrance motion disabled when the user prefers reduced motion. */
+/* Entrance motion: disabled when the user prefers reduced motion. */
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
