@@ -20,7 +20,7 @@ export default function MarketCard({ market }: { market: MarketView }) {
             {trustless && (
               <span
                 className="pill bg-turf-500/15 text-turf-400"
-                title="Settled trustlessly from TxLINE's onchain Merkle root"
+                title="Settled trustlessly from TxLINE's on-chain Merkle root"
               >
                 ◈ Trustless
               </span>
