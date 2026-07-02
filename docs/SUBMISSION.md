@@ -11,7 +11,7 @@ Fill the bracketed links before submitting.
 TxLINE's signed score data. Markets resolve via a CPI into TxODDS's `validate_stat`, with no oracle
 authority.
 
-**Demo video (≤5 min, mandatory):** `[FILL: Loom/YouTube link]`
+**Demo video (≤5 min, mandatory):** https://www.loom.com/share/b828bd6502c747b9b13e613e745889a0
 
 **Public GitHub repo:** https://github.com/G-ojies/worldcup-match-vault
 
@@ -69,4 +69,4 @@ proof-JSON↔IDL field-name mismatches worth documenting.
 - [x] Working build, not a concept/wireframe
 - [x] Frontend deployed and linked: https://worldcup-match-vault.vercel.app
 - [x] Public repo pushed to GitHub: https://github.com/G-ojies/worldcup-match-vault
-- [ ] Demo video recorded and linked
+- [x] Demo video recorded and linked
