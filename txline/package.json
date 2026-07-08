@@ -8,7 +8,9 @@
     "bootstrap": "ts-node src/bootstrap-access.ts",
     "probe": "ts-node src/probe-validation.ts",
     "e2e": "ts-node src/devnet-trustless-e2e.ts",
-    "seed": "ts-node src/seed-demo-markets.ts"
+    "seed": "ts-node src/seed-demo-markets.ts",
+    "seed:ko": "ts-node src/seed-knockout.ts",
+    "settle:ko": "ts-node src/settle-knockout.ts"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.1",

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GreYat WorldCup Analytics — Demo Video Script</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #14201a; line-height: 1.5; font-size: 11pt; margin: 0;
+  }
+  h1 { font-size: 25pt; margin: 0 0 2px; letter-spacing: -0.5px; color: #064e3b; }
+  .sub { color: #6b7280; font-size: 11pt; margin: 0 0 14px; }
+  .meta { display: flex; gap: 22px; flex-wrap: wrap; font-size: 9.5pt; color: #374151;
+          border-top: 2px solid #10b981; border-bottom: 1px solid #d1d5db; padding: 8px 0; margin-bottom: 16px; }
+  .meta b { color: #064e3b; }
+  h2 { font-size: 13pt; color: #065f46; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #a7f3d0; }
+  h3 { font-size: 11pt; margin: 14px 0 6px; color: #111827; }
+  ol, ul { margin: 6px 0 10px; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code { background: #ecfdf5; color: #065f46; padding: 1px 5px; border-radius: 4px;
+         font-family: "SF Mono", Consolas, monospace; font-size: 9.5pt; }
+  .callout { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 9px 12px; margin: 10px 0;
+             font-size: 10pt; border-radius: 0 6px 6px 0; }
+  .scene { border: 1px solid #d1d5db; border-radius: 8px; margin: 12px 0; overflow: hidden;
+           page-break-inside: avoid; }
+  .scene-head { background: #064e3b; color: #ecfdf5; padding: 7px 12px; display: flex;
+                justify-content: space-between; align-items: center; }
+  .scene-head .t { font-weight: 700; font-size: 11pt; }
+  .scene-head .tc { font-family: "SF Mono", Consolas, monospace; font-size: 10pt; color: #6ee7b7; }
+  .scene-body { padding: 10px 13px; }
+  .say-label, .do-label { font-size: 8pt; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .say-label { color: #059669; }
+  .do-label { color: #b45309; }
+  .say { font-size: 12.5pt; line-height: 1.55; color: #111827; margin: 3px 0 12px; }
+  .say em { color: #047857; font-style: normal; font-weight: 600; }
+  .do { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 6px; padding: 7px 11px;
+        font-size: 9.5pt; color: #374151; margin-top: 4px; }
+  .pagebreak { page-break-before: always; }
+  .tiplist li { font-size: 10pt; }
+  footer { margin-top: 20px; font-size: 8.5pt; color: #9ca3af; text-align: center;
+           border-top: 1px solid #e5e7eb; padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>GreYat WorldCup Analytics</h1>
+<p class="sub">Demo Video Script &amp; Recording Playbook — TxODDS × Superteam, "Prediction Markets &amp; Settlement" (World Cup)</p>
+
+<div class="meta">
+  <span><b>Length</b> target 3:30–4:30 · hard cap 5:00</span>
+  <span><b>Format</b> 1080p, screen + voiceover</span>
+  <span><b>Live URL</b> worldcup-match-vault.vercel.app</span>
+  <span><b>Program (devnet)</b> E5ffcawirq6hVse98NJVDGQ4RSkkNAYWzN2RNoRAikzJ</span>
+</div>
+
+<p><b>How to use this doc:</b> read the large <span style="color:#059669;font-weight:700">SAY</span> text aloud at a
+natural pace; the <span style="color:#b45309;font-weight:700">DO</span> boxes tell you what to click while you talk.
+Everything referenced is already staged, deployed, and verified live.</p>
+
+<h2>Part 1 — Pre-flight (before you hit record)</h2>
+<ol>
+  <li><b>Clean browser profile.</b> Use a fresh profile with <b>only your Solana wallet</b> (Phantom/Solflare)
+      enabled — disable every other wallet extension. This removes the <code>window.cardano</code> extension error
+      that pops a red full-screen overlay.</li>
+  <li><b>Wallet → Devnet, funded.</b> Switch the wallet to <b>Devnet</b> and fund ~<b>0.3 SOL</b> from
+      <code>faucet.solana.com</code>.</li>
+  <li><b>URL:</b> use <b>production</b> — <code>https://worldcup-match-vault.vercel.app</code> (it proves the build is
+      deployed). Fallback: <code>localhost:3000</code> via <code>cd app &amp;&amp; npm run dev</code>.</li>
+  <li><b>Open tabs, in order:</b> (1) the dApp, (2) <b>Solana Explorer set to devnet</b>
+      (<code>explorer.solana.com/?cluster=devnet</code>), (3) the GitHub repo.</li>
+  <li><b>Recorder:</b> OBS Studio (or SimpleScreenRecorder) — capture <b>screen + microphone</b> at 1080p.
+      Record a 10-second test and play it back to check audio.</li>
+  <li>Zoom the browser to <b>~110–125%</b> for legibility. Close notifications, silence your phone.</li>
+</ol>
+
+<div class="callout">
+  <b>Know this quirk:</b> the <b>Netherlands vs Morocco</b> market's <i>live-odds header</i> may be blank —
+  that TxLINE fixture aged out of the live feed. The pools and settlement still work perfectly. So: demo
+  <b>live odds on the England market</b>, and use <b>Netherlands vs Morocco only for bet → settle → claim</b>.
+</div>
+
+<div class="pagebreak"></div>
+<h2>Part 2 — The script</h2>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">Hook — what it is</span><span class="tc">0:00 – 0:25</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"This is <em>GreYat WorldCup Analytics</em> — on-chain World Cup prediction markets on Solana that
+      settle <em>without trusting any oracle</em>. You stake SOL on Home, Draw, or Away. When a match ends, the
+      result isn't asserted by an admin — it's cryptographically <em>proven</em> against TxODDS's own signed score
+      data, right on-chain. Let me show you."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Start on the markets grid (home page). Keep the stat cards — TVL, Active markets, Trustless
+      settlements — visible.</div>
+  </div>
+</div>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">The data layer (TxLINE)</span><span class="tc">0:25 – 1:05</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"Every market here is populated from <em>live TxLINE fixtures</em>. Total value locked, active
+      markets, and trustless settlements are read straight from the chain. Let me open this one — England versus
+      Congo DR. You can see live odds, the pool for each outcome, and the implied payout, all driven by TxLINE's
+      score and odds streams. Each market is <em>bound at creation</em> to a specific TxLINE fixture ID and the exact
+      goal stat-keys it settles against — and that binding is what makes settlement trustless."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Click the <b>England vs Congo DR</b> card. Cursor over the live odds, the pool bars, and the
+      "Bound to TxLINE fixture #…" line in the Settlement box.</div>
+  </div>
+</div>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">Place a bet</span><span class="tc">1:05 – 1:55</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"Let's place a bet. I'll connect my devnet wallet… and stake on the <em>Draw</em> for Netherlands
+      versus Morocco. Watch the pool bar and the payout preview update instantly. That's a real transaction — here
+      it is on Solana Explorer. Betting stays open until kickoff; after that, the market waits for a final, provable
+      result."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Go back → open <b>Netherlands vs Morocco</b> (<code>WC_18172280_LIVE</code>). Connect wallet.
+      Place a small <b>Draw</b> bet (~<b>0.02 SOL</b>) and approve. <b>Bet Draw specifically</b> — Draw is the
+      winning outcome, so this lets you claim on camera later. Open the bet tx on Explorer.</div>
+  </div>
+</div>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">Trustless settlement — THE moment</span><span class="tc">1:55 – 3:20</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"Now the part that matters. This match has finished one-one. I click <em>Settle trustlessly</em>.
+      Under the hood: the app fetches the final score from TxLINE, then a <em>three-stage Merkle proof</em> for the
+      home and away goals. It submits one instruction — <code>resolve_market_trustless</code> — which makes a
+      <em>cross-program call into TxODDS's own <code>validate_stat</code></em>, verifying that proof against the
+      on-chain daily-scores Merkle root. The program reads back the boolean and only settles if the proof checks out.
+      <br><br>
+      And here's the <em>receipt</em>. The two proven stat leaves — home one, away one. The predicate: home minus
+      away equals zero, so the outcome is <em>Draw</em>. The proof-node counts, and the exact daily-root PDA it
+      verified against. And this badge: <em>'Verified against TxODDS on-chain Merkle root. No oracle authority.'</em>
+      Here's the settlement transaction — you can see the <em>inner instruction</em> calling the TxLINE program. No
+      signer could have forced this; a wrong claim simply reverts."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Click <b>Settle trustlessly</b>, approve. When the <b>Verifiable Resolution</b> receipt renders,
+      slowly cursor over: stat leaves → predicate → proof-node counts → daily-root PDA → the badge. Then open the
+      settlement tx on Explorer and point at the inner instruction to the TxLINE program.</div>
+  </div>
+</div>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">Claim + integrity</span><span class="tc">3:20 – 4:05</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"Because I bet on the Draw — the winning outcome — I can now <em>claim</em>. My SOL balance goes up
+      by my proportional share of the pools, minus a small protocol fee. Losers can't claim, and the market can't be
+      settled twice. The only thing anyone trusts here is TxODDS's signed data — not me, not an admin, not an oracle
+      key."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Click <b>Claim</b>, approve. Show the wallet balance increase (or the claim tx). Briefly show the
+      market is now settled and can't be re-settled.</div>
+  </div>
+</div>
+
+<div class="scene">
+  <div class="scene-head"><span class="t">Close</span><span class="tc">4:05 – 4:40</span></div>
+  <div class="scene-body">
+    <div class="say-label">Say</div>
+    <p class="say">"That's GreYat WorldCup Analytics — live TxLINE data in, cryptographic settlement out. It's
+      deployed and fully working on <em>devnet</em>, on TxLINE's <em>free World Cup tier</em>, with seven passing
+      on-chain tests and a full end-to-end settlement flow. Built with <em>TxLINE as the primary data source</em> and
+      <em><code>validate_stat</code> as the settlement engine</em>. Thanks for watching."</p>
+    <div class="do-label">Do</div>
+    <div class="do">Return to the markets grid. Optionally flash the deployed program id and the GitHub repo URL.</div>
+  </div>
+</div>
+
+<div class="pagebreak"></div>
+<h2>Part 3 — Delivery tips</h2>
+<ul class="tiplist">
+  <li><b>Lead with the differentiator.</b> The settlement moment (1:55–3:20) is what wins — give it room, slow down,
+      let the receipt breathe on screen.</li>
+  <li><b>Pause on approvals.</b> When a wallet popup appears, stop narrating for a beat, approve, then resume.</li>
+  <li><b>Say the words "no oracle authority"</b> at least twice — it's the core claim of the whole project.</li>
+  <li><b>Don't rush the receipt.</b> Judges need ~4–5 seconds to read the proven leaves, predicate, and PDA.</li>
+  <li><b>If you stumble, keep going</b> — you can trim in post. One clean take of the settle moment matters most.</li>
+</ul>
+
+<h2>Part 4 — After recording</h2>
+<ol>
+  <li><b>Trim</b> dead air at start/end; confirm it's <b>under 5:00</b>.</li>
+  <li><b>Upload</b> to YouTube (<b>Unlisted</b>) or Loom; enable "anyone with the link".</li>
+  <li><b>Send the link</b> to be pasted into <code>docs/SUBMISSION.md</code> (checks the final eligibility box).</li>
+  <li><b>Submit</b> the Superteam Earn form using the ready answers in <code>docs/SUBMISSION.md</code>.</li>
+</ol>
+
+<h2>Retake notes</h2>
+<ul>
+  <li>The <b>live settle</b> on <code>WC_18172280_LIVE</code> is <b>one-shot</b> — once settled it stays settled. Need
+      another take? A fresh unsettled market can be seeded in ~30 seconds.</li>
+  <li>The already-settled market <code>WC_18172280_ry5ws</code> shows the <b>receipt UI repeatably</b> — good for
+      re-recording just the receipt explanation.</li>
+  <li><b>Backup if devnet RPC is slow:</b> run <code>cd txline &amp;&amp; npm run e2e</code> and narrate the terminal
+      output + the resulting Explorer txs — the on-chain result is identical. Keep the receipt UI as the visual.</li>
+</ul>
+
+<footer>GreYat WorldCup Analytics · Demo video script · TxODDS × Superteam Earn — World Cup track</footer>
+
+</body>
+</html>
