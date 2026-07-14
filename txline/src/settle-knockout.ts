@@ -28,7 +28,10 @@ const OUR_PROGRAM = new PublicKey(ourIdl.address);
 const TXLINE_PROGRAM = new PublicKey(
   process.env.TXLINE_PROGRAM_ID || "6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J"
 );
-const KO_RE = /^WC_\d+_KO$/;
+// _K2 markets carry the corrected binding (goal-period 100 + 90-min finality
+// gate). Old _KO markets were bound to period 0 and can never settle
+// trustlessly, so they are intentionally excluded here.
+const KO_RE = /^WC_\d+_K2$/;
 
 const log = (...a: any[]) => console.log(...a);
 const sol = (l: number) => (l / 1e9).toFixed(4);

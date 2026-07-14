@@ -104,8 +104,28 @@ export class TxlineClient {
   }
 
   async getScoresHistorical(fixtureId: number): Promise<ScoreUpdate[]> {
-    const r = await this.http.get(`/api/scores/historical/${fixtureId}`);
-    return r.data;
+    // The historical endpoint replays the match as an SSE stream
+    // (text/event-stream), NOT a JSON array — axios hands back the raw text,
+    // so parse the `data:` lines into the update objects the callers expect.
+    const r = await this.http.get(`/api/scores/historical/${fixtureId}`, {
+      responseType: "text",
+      transformResponse: (d) => d,
+    });
+    const body = r.data;
+    if (Array.isArray(body)) return body as ScoreUpdate[]; // already-parsed (defensive)
+    const out: ScoreUpdate[] = [];
+    for (const line of String(body).split(/\r?\n/)) {
+      const m = line.match(/^data:\s?(.*)$/);
+      if (!m) continue;
+      const payload = m[1].trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        out.push(JSON.parse(payload) as ScoreUpdate);
+      } catch {
+        /* ignore keep-alive / non-JSON frames */
+      }
+    }
+    return out;
   }
 
   async getScoresUpdates(fixtureId: number): Promise<ScoreUpdate[]> {

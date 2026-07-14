@@ -32,6 +32,19 @@ const OUR_PROGRAM = new PublicKey(ourIdl.address);
 const WC = 72; // World Cup competitionId
 const SKIP_FIXTURES = new Set([18172280]); // aged demo fixture kept by the retake cron
 
+// Binding correctness (see seed vs. TxLINE data shape):
+//   - Knockout finals report full-time goals under period 100 (period tracks
+//     match phase: 1H=2, 2H=4, final=100), NOT period 0. The binding is
+//     immutable, so it MUST match the period the finalised leaf carries.
+//   - settle_not_before is both the finality gate AND the stale-proof floor
+//     (proof.max_timestamp must reach it). 90 min after kickoff is safely below
+//     any real final whistle (regulation or extra time) yet above any in-play
+//     first/second-half proof, so a genuine final always clears it.
+const SUFFIX = "K2"; // bump from _KO — old _KO markets were bound to period 0 and cannot settle
+const GOAL_PERIOD = 100;
+const SETTLE_OFFSET_SECS = 5400; // 90 min after kickoff
+const OLD_KO_RE = /^WC_(\d+)_KO$/; // recover aged-out fixtures from prior markets
+
 const BET_LAMPORTS = 0.02 * LAMPORTS_PER_SOL;
 const FUND_LAMPORTS = 0.045 * LAMPORTS_PER_SOL;
 
@@ -145,31 +158,66 @@ async function main() {
   log(`admin   : ${admin.publicKey.toBase58()}  (${sol(await connection.getBalance(admin.publicKey))} SOL)\n`);
 
   const tx = new TxlineClient();
-  const fixtures = (await tx.getFixturesSnapshot(WC)).filter(
+
+  // Normalise the current knockout fixtures into a common shape. Source them
+  // from the live snapshot (upcoming matches) UNION the fixtures behind any
+  // existing on-chain _KO markets — the latter recovers finished matches that
+  // have since aged out of the snapshot so we can still (re)bind + settle them.
+  type Fx = { fixtureId: number; home: string; away: string; homeKey: number; awayKey: number; startSec: number };
+  const byFixture = new Map<number, Fx>();
+
+  const snapshot = (await tx.getFixturesSnapshot(WC)).filter(
     (f) => f.CompetitionId === WC && !SKIP_FIXTURES.has(f.FixtureId)
   );
-  // Play order: earliest kickoff first.
-  fixtures.sort((a, b) => a.StartTime - b.StartTime);
+  for (const f of snapshot) {
+    byFixture.set(f.FixtureId, {
+      fixtureId: f.FixtureId,
+      home: f.Participant1IsHome ? f.Participant1 : f.Participant2,
+      away: f.Participant1IsHome ? f.Participant2 : f.Participant1,
+      homeKey: f.Participant1IsHome ? 1 : 2,
+      awayKey: f.Participant1IsHome ? 2 : 1,
+      startSec: Math.floor(f.StartTime / 1000),
+    });
+  }
+
+  const existing: any[] = await programFor(connection, admin).account.market.all();
+  for (const m of existing) {
+    const mm = OLD_KO_RE.exec(m.account.matchId);
+    if (!mm) continue;
+    const fid = Number(m.account.fixtureId);
+    if (SKIP_FIXTURES.has(fid) || byFixture.has(fid)) continue;
+    // Recover kickoff from the old market's full-time gate (start + 8100).
+    byFixture.set(fid, {
+      fixtureId: fid,
+      home: m.account.homeTeam,
+      away: m.account.awayTeam,
+      homeKey: m.account.homeGoalKey,
+      awayKey: m.account.awayGoalKey,
+      startSec: Number(m.account.settleNotBefore) - 8100,
+    });
+  }
+
+  const fixtures = [...byFixture.values()].sort((a, b) => a.startSec - b.startSec);
   const nowSec = Math.floor(Date.now() / 1000);
-  log(`${fixtures.length} current World Cup fixtures to seed:\n`);
+  log(`${fixtures.length} current World Cup fixtures to seed (period ${GOAL_PERIOD}, suffix _${SUFFIX}):\n`);
 
   const results: any[] = [];
   for (const f of fixtures) {
-    const home = f.Participant1IsHome ? f.Participant1 : f.Participant2;
-    const away = f.Participant1IsHome ? f.Participant2 : f.Participant1;
-    const matchId = `WC_${f.FixtureId}_KO`;
-    const startSec = Math.floor(f.StartTime / 1000);
+    const home = f.home;
+    const away = f.away;
+    const matchId = `WC_${f.fixtureId}_${SUFFIX}`;
+    const startSec = f.startSec;
     // Keep betting open for the demo: real kickoff if it is still in the
     // future, otherwise a short synthetic window for already-started matches.
     const matchTs = startSec > nowSec + 1800 ? startSec : nowSec + 6 * 3600;
     const binding = {
-      fixtureId: new BN(f.FixtureId),
-      homeGoalKey: f.Participant1IsHome ? 1 : 2,
-      awayGoalKey: f.Participant1IsHome ? 2 : 1,
-      goalPeriod: 0,
-      settleNotBefore: new BN(startSec + 8100), // real full-time gate (~135 min)
+      fixtureId: new BN(f.fixtureId),
+      homeGoalKey: f.homeKey,
+      awayGoalKey: f.awayKey,
+      goalPeriod: GOAL_PERIOD,
+      settleNotBefore: new BN(startSec + SETTLE_OFFSET_SECS),
     };
-    log(`== ${home} vs ${away}  (fixture ${f.FixtureId}, kickoff ${new Date(f.StartTime).toISOString()}) ==`);
+    log(`== ${home} vs ${away}  (fixture ${f.fixtureId}, kickoff ${new Date(startSec * 1000).toISOString()}) ==`);
     const m = await createMarket(connection, admin, matchId, home, away, matchTs, binding);
     const bets: any[] = [];
     if (m.createSig !== "(existing)") {

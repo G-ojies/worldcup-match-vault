@@ -73,6 +73,10 @@ export function useMarkets() {
       const all = await (program.account as any).market.all();
       const views = all
         .map((a: any) => normalize(a.publicKey, a.account))
+        // Hide the superseded first-gen knockout markets (WC_<id>_KO). They were
+        // bound to goal-period 0 and cannot settle trustlessly; the _K2 markets
+        // carry the corrected binding and replace them one-for-one.
+        .filter((m: MarketView) => !/^WC_\d+_KO$/.test(m.matchId))
         .sort((a: MarketView, b: MarketView) => a.matchTimestamp - b.matchTimestamp);
       setMarkets(views);
     } catch (e: any) {
