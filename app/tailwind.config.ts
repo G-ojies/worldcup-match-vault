@@ -29,7 +29,11 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+      },
+      borderRadius: {
+        card: "var(--radius)",
+        control: "var(--radius-sm)",
       },
       boxShadow: {
         glow: "0 0 0 1px rgba(16,185,129,0.15), 0 8px 40px -12px rgba(16,185,129,0.25)",

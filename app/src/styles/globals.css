@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+ * MatchVault is a sibling of SharpSignal and GroupStage: shared skeleton
+ * (Geist + Geist Mono, mono micro-labels, hairline borders, flat cards, one
+ * radius scale), own accent — emerald, because that is this product's colour.
+ * ───────────────────────────────────────────────────────────── */
 :root {
-  --font-sans: "Inter", system-ui, sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+/* Font vars MUST be bridged on the element carrying geist's .variable classes
+ * (the wrapper in _app.tsx), not on :root. A var() inside a custom property is
+ * substituted at the declaring element, so bridging on :root — where
+ * --font-geist-sans is undefined — invalidates the declaration and the page
+ * silently falls back to serif. Pages Router can't put the classes on <html>
+ * because next/font isn't supported in _document. */
+.font-root {
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-family: var(--font-sans);
 }
 
 html,
@@ -12,6 +30,8 @@ body {
   margin: 0;
   background: #0a0e0f;
   color: #e7eef0;
+  font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -35,23 +55,52 @@ body {
 }
 
 @layer components {
+  /* Monospace micro-label — the shared device across all three tracks. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.55);
+  }
+
+  .tnum {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Big stat figure for hero stat cells. */
+  .stat {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(24px, 3vw, 30px);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  /* Flat card: border only. No blur, no shadow — the two are never combined. */
   .card {
-    @apply rounded-2xl border border-white/5 bg-pitch-900/80 backdrop-blur;
+    @apply rounded-card border border-white/[0.08] bg-pitch-900;
+  }
+  .hairline {
+    @apply border-t border-white/[0.08];
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-[opacity,transform,background-color] duration-100 ease-out disabled:cursor-not-allowed disabled:opacity-40;
   }
   .btn-primary {
-    @apply btn bg-turf-500 text-pitch-950 hover:bg-turf-400;
+    @apply btn bg-turf-500 text-pitch-950 hover:bg-turf-400 active:translate-y-px;
   }
   .btn-ghost {
-    @apply btn border border-white/10 text-white/80 hover:border-white/25 hover:text-white;
+    @apply btn border border-white/[0.14] text-white/80 hover:bg-white/[0.06] hover:text-white active:translate-y-px;
   }
   .pill {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
   }
   .input {
-    @apply w-full rounded-xl border border-white/10 bg-pitch-950/60 px-3 py-2 text-sm text-white outline-none transition focus:border-turf-500/60 focus-visible:ring-2 focus-visible:ring-turf-500/40;
+    @apply w-full rounded-control border border-white/10 bg-pitch-950/60 px-3 py-2 text-sm text-white outline-none transition-colors duration-100 ease-out focus:border-turf-500/60 focus-visible:ring-2 focus-visible:ring-turf-500/40;
   }
 }
 
