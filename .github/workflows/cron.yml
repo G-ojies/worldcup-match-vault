@@ -1,0 +1,51 @@
+name: auto-settle + seed markets
+
+# Runs the proven txline/ scripts on a schedule so the live app stays fresh
+# without any local machine: settle finished markets trustlessly, then seed
+# markets for any newly-listed World Cup fixtures. Both scripts are idempotent
+# and seed has a balance-floor guard, so re-runs are safe.
+#
+# Secrets (repo settings): ADMIN_KEYPAIR (devnet id.json contents),
+# TXLINE_CREDENTIALS (txline/credentials.json contents).
+
+on:
+  schedule:
+    - cron: "*/20 * * * *" # every 20 minutes (UTC)
+  workflow_dispatch: {} # manual "Run workflow" button, for testing
+
+# Never let two runs overlap (they'd race on the same admin wallet nonce).
+concurrency:
+  group: match-vault-cron
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Restore secrets to the paths the scripts expect
+        env:
+          ADMIN_KEYPAIR: ${{ secrets.ADMIN_KEYPAIR }}
+          TXLINE_CREDENTIALS: ${{ secrets.TXLINE_CREDENTIALS }}
+        run: |
+          mkdir -p "$HOME/.config/solana"
+          printf '%s' "$ADMIN_KEYPAIR" > "$HOME/.config/solana/id.json"
+          printf '%s' "$TXLINE_CREDENTIALS" > txline/credentials.json
+
+      - name: Install txline deps
+        working-directory: txline
+        run: npm ci || npm install
+
+      - name: Settle finished markets (trustless)
+        working-directory: txline
+        run: npm run settle:ko
+
+      - name: Seed markets for new fixtures
+        working-directory: txline
+        run: npm run seed:ko
