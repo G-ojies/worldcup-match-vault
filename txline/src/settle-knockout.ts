@@ -22,7 +22,7 @@ import * as path from "path";
 import { TxlineClient } from "./txline-client";
 import { buildValidateStatArgs, epochDayFromMs } from "./proof";
 
-const ourIdl = require("../../target/idl/worldcup_match_vault.json");
+const ourIdl = require("../worldcup_match_vault.idl.json");
 const RPC = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
 const OUR_PROGRAM = new PublicKey(ourIdl.address);
 const TXLINE_PROGRAM = new PublicKey(

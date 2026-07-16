@@ -1,0 +1,1234 @@
+{
+  "address": "E5ffcawirq6hVse98NJVDGQ4RSkkNAYWzN2RNoRAikzJ",
+  "metadata": {
+    "name": "worldcup_match_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "claim_payout",
+      "docs": [
+        "Winning bettor claims their proportional share of the pools (minus protocol fee)."
+      ],
+      "discriminator": [
+        127,
+        240,
+        132,
+        62,
+        227,
+        198,
+        146,
+        133
+      ],
+      "accounts": [
+        {
+          "name": "bettor",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "bet"
+          ]
+        },
+        {
+          "name": "market",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.match_id",
+                "account": "Market"
+              }
+            ]
+          },
+          "relations": [
+            "bet"
+          ]
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "SOL vault holding all stakes for this market."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bet",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "bettor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_market",
+      "docs": [
+        "Admin creates a prediction market for a specific World Cup match.",
+        "`binding` ties the market to a TxLINE fixture for trustless settlement."
+      ],
+      "discriminator": [
+        103,
+        226,
+        97,
+        235,
+        200,
+        188,
+        251,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "match_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "SOL vault PDA for this market. Created lazily on the first bet transfer;",
+            "declared here so the address is anchored to the market at creation time."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "match_id",
+          "type": "string"
+        },
+        {
+          "name": "home_team",
+          "type": "string"
+        },
+        {
+          "name": "away_team",
+          "type": "string"
+        },
+        {
+          "name": "match_timestamp",
+          "type": "i64"
+        },
+        {
+          "name": "oracle_authority",
+          "type": "pubkey"
+        },
+        {
+          "name": "binding",
+          "type": {
+            "defined": {
+              "name": "TxlineBinding"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "place_bet",
+      "docs": [
+        "User places a SOL bet on an outcome (Home / Away / Draw)."
+      ],
+      "discriminator": [
+        222,
+        62,
+        67,
+        220,
+        63,
+        166,
+        126,
+        33
+      ],
+      "accounts": [
+        {
+          "name": "bettor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.match_id",
+                "account": "Market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "SOL vault that accumulates every stake for this market."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bet",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "bettor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "predicted_outcome",
+          "type": {
+            "defined": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "resolve_market",
+      "docs": [
+        "Legacy path: a registered oracle authority submits the final outcome."
+      ],
+      "discriminator": [
+        155,
+        23,
+        80,
+        173,
+        46,
+        74,
+        23,
+        239
+      ],
+      "accounts": [
+        {
+          "name": "oracle_authority",
+          "docs": [
+            "Must be the oracle authority recorded on the market."
+          ],
+          "signer": true,
+          "relations": [
+            "market"
+          ]
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.match_id",
+                "account": "Market"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "outcome",
+          "type": {
+            "defined": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "resolve_market_trustless",
+      "docs": [
+        "Trustless path: settle the market from a TxLINE `validate_stat` Merkle",
+        "proof of the final goals. No oracle authority — anyone can submit the",
+        "proof and the market settles only if TxLINE's program confirms it."
+      ],
+      "discriminator": [
+        193,
+        248,
+        109,
+        1,
+        102,
+        42,
+        71,
+        6
+      ],
+      "accounts": [
+        {
+          "name": "resolver",
+          "docs": [
+            "Permissionless — anyone can settle once a valid proof exists."
+          ],
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.match_id",
+                "account": "Market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "daily_scores_merkle_roots",
+          "docs": [
+            "TxLINE `[\"daily_scores_roots\", epoch_day]` PDA for the match day."
+          ]
+        },
+        {
+          "name": "txline_program",
+          "docs": [
+            "The TxLINE program. CHECK: key is asserted to equal TXLINE_PROGRAM_ID in the CPI."
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "claimed_outcome",
+          "type": {
+            "defined": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "name": "ts",
+          "type": "i64"
+        },
+        {
+          "name": "fixture_summary",
+          "type": {
+            "defined": {
+              "name": "ScoresBatchSummary"
+            }
+          }
+        },
+        {
+          "name": "fixture_proof",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "ProofNode"
+              }
+            }
+          }
+        },
+        {
+          "name": "main_tree_proof",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "ProofNode"
+              }
+            }
+          }
+        },
+        {
+          "name": "stat_home",
+          "type": {
+            "defined": {
+              "name": "StatTerm"
+            }
+          }
+        },
+        {
+          "name": "stat_away",
+          "type": {
+            "defined": {
+              "name": "StatTerm"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Bet",
+      "discriminator": [
+        147,
+        23,
+        35,
+        59,
+        15,
+        75,
+        155,
+        32
+      ]
+    },
+    {
+      "name": "Market",
+      "discriminator": [
+        219,
+        190,
+        213,
+        55,
+        0,
+        227,
+        198,
+        154
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "BetPlaced",
+      "discriminator": [
+        88,
+        88,
+        145,
+        226,
+        126,
+        206,
+        32,
+        0
+      ]
+    },
+    {
+      "name": "MarketCreated",
+      "discriminator": [
+        88,
+        184,
+        130,
+        231,
+        226,
+        84,
+        6,
+        58
+      ]
+    },
+    {
+      "name": "MarketResolved",
+      "discriminator": [
+        89,
+        67,
+        230,
+        95,
+        143,
+        106,
+        199,
+        202
+      ]
+    },
+    {
+      "name": "MarketResolvedTrustless",
+      "discriminator": [
+        214,
+        137,
+        82,
+        161,
+        245,
+        243,
+        196,
+        112
+      ]
+    },
+    {
+      "name": "PayoutClaimed",
+      "discriminator": [
+        200,
+        39,
+        105,
+        112,
+        116,
+        63,
+        58,
+        149
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "MarketAlreadySettled",
+      "msg": "Market has already been settled"
+    },
+    {
+      "code": 6001,
+      "name": "BetAfterMatchStart",
+      "msg": "Cannot place a bet at or after match kickoff"
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedOracle",
+      "msg": "Signer is not the authorized oracle for this market"
+    },
+    {
+      "code": 6003,
+      "name": "AlreadyClaimed",
+      "msg": "This bet has already been claimed"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidOutcome",
+      "msg": "Invalid outcome for this operation"
+    },
+    {
+      "code": 6005,
+      "name": "MarketNotSettled",
+      "msg": "Market has not been settled yet"
+    },
+    {
+      "code": 6006,
+      "name": "ZeroAmount",
+      "msg": "Bet amount must be greater than zero"
+    },
+    {
+      "code": 6007,
+      "name": "MathOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6008,
+      "name": "WrongTxlineProgram",
+      "msg": "Provided account is not the TxLINE program"
+    },
+    {
+      "code": 6009,
+      "name": "NoValidationReturn",
+      "msg": "TxLINE validate_stat returned no data"
+    },
+    {
+      "code": 6010,
+      "name": "ProofOutcomeMismatch",
+      "msg": "TxLINE proof does not satisfy the claimed outcome's predicate"
+    },
+    {
+      "code": 6011,
+      "name": "FixtureMismatch",
+      "msg": "Proof is for a different fixture than this market"
+    },
+    {
+      "code": 6012,
+      "name": "StatKeyMismatch",
+      "msg": "Proof stat key/period does not match the market's configured goal stats"
+    },
+    {
+      "code": 6013,
+      "name": "MatchNotFinished",
+      "msg": "Match cannot be settled before full time"
+    },
+    {
+      "code": 6014,
+      "name": "StaleProof",
+      "msg": "Proof predates full time; not a final score"
+    },
+    {
+      "code": 6015,
+      "name": "NoFixtureBound",
+      "msg": "This market has no TxLINE fixture bound for trustless settlement"
+    }
+  ],
+  "types": [
+    {
+      "name": "Bet",
+      "docs": [
+        "A single bettor's stake on one market.",
+        "",
+        "PDA: [\"bet\", market, bettor] — one bet account per (market, wallet) pair."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "bettor",
+            "type": "pubkey"
+          },
+          {
+            "name": "predicted_outcome",
+            "type": {
+              "defined": {
+                "name": "Outcome"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BetPlaced",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "bettor",
+            "type": "pubkey"
+          },
+          {
+            "name": "predicted_outcome",
+            "type": {
+              "defined": {
+                "name": "Outcome"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Market",
+      "docs": [
+        "A prediction market for a single World Cup match.",
+        "",
+        "PDA: [\"market\", match_id]. All staked SOL lives in the sibling vault PDA",
+        "([\"vault\", market]); the per-outcome totals below are the on-chain ledger",
+        "used to compute proportional payouts."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "match_id",
+            "docs": [
+              "TxODDS match identifier (e.g. \"WC2026_001\")."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "home_team",
+            "type": "string"
+          },
+          {
+            "name": "away_team",
+            "type": "string"
+          },
+          {
+            "name": "match_timestamp",
+            "docs": [
+              "Unix timestamp of kickoff. Bets are rejected at/after this time."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "outcome",
+            "docs": [
+              "Final outcome; `Unresolved` until the oracle settles."
+            ],
+            "type": {
+              "defined": {
+                "name": "Outcome"
+              }
+            }
+          },
+          {
+            "name": "total_home_pool",
+            "type": "u64"
+          },
+          {
+            "name": "total_away_pool",
+            "type": "u64"
+          },
+          {
+            "name": "total_draw_pool",
+            "type": "u64"
+          },
+          {
+            "name": "oracle_authority",
+            "docs": [
+              "The only key allowed to resolve this market via the legacy oracle path."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "is_settled",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "fixture_id",
+            "docs": [
+              "TxLINE numeric fixture id this market tracks (0 = none / legacy market)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "home_goal_key",
+            "docs": [
+              "TxLINE score-stat key for the HOME participant's goals (period-encoded)."
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "away_goal_key",
+            "docs": [
+              "TxLINE score-stat key for the AWAY participant's goals (period-encoded)."
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "goal_period",
+            "docs": [
+              "Stat period the goal keys belong to (full-time period)."
+            ],
+            "type": "i32"
+          },
+          {
+            "name": "settle_not_before",
+            "docs": [
+              "Earliest unix time a trustless settlement is accepted (kickoff + full time)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "settlement_kind",
+            "docs": [
+              "How this market was settled: 0 = unsettled, 1 = oracle, 2 = TxLINE proof."
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "match_id",
+            "type": "string"
+          },
+          {
+            "name": "home_team",
+            "type": "string"
+          },
+          {
+            "name": "away_team",
+            "type": "string"
+          },
+          {
+            "name": "match_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "oracle_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "fixture_id",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketResolved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "match_id",
+            "type": "string"
+          },
+          {
+            "name": "outcome",
+            "type": {
+              "defined": {
+                "name": "Outcome"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketResolvedTrustless",
+      "docs": [
+        "Emitted when a market is settled trustlessly from a TxLINE `validate_stat`",
+        "Merkle proof — no oracle authority involved."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "match_id",
+            "type": "string"
+          },
+          {
+            "name": "fixture_id",
+            "type": "i64"
+          },
+          {
+            "name": "outcome",
+            "type": {
+              "defined": {
+                "name": "Outcome"
+              }
+            }
+          },
+          {
+            "name": "home_goals",
+            "type": "i32"
+          },
+          {
+            "name": "away_goals",
+            "type": "i32"
+          },
+          {
+            "name": "proof_ts",
+            "docs": [
+              "Unix time of the proven scores batch (TxLINE update timestamp)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "resolver",
+            "docs": [
+              "Resolver who submitted the proof (permissionless)."
+            ],
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Outcome",
+      "docs": [
+        "Possible final results for a match. `Unresolved` is the pre-settlement state."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Unresolved"
+          },
+          {
+            "name": "Home"
+          },
+          {
+            "name": "Away"
+          },
+          {
+            "name": "Draw"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PayoutClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "bettor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProofNode",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "is_right_sibling",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ScoreStat",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "key",
+            "type": "u32"
+          },
+          {
+            "name": "value",
+            "type": "i32"
+          },
+          {
+            "name": "period",
+            "type": "i32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ScoresBatchSummary",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "fixture_id",
+            "type": "i64"
+          },
+          {
+            "name": "update_stats",
+            "type": {
+              "defined": {
+                "name": "ScoresUpdateStats"
+              }
+            }
+          },
+          {
+            "name": "events_sub_tree_root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ScoresUpdateStats",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "update_count",
+            "type": "i32"
+          },
+          {
+            "name": "min_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "max_timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StatTerm",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "stat_to_prove",
+            "type": {
+              "defined": {
+                "name": "ScoreStat"
+              }
+            }
+          },
+          {
+            "name": "event_stat_root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "stat_proof",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "ProofNode"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TxlineBinding",
+      "docs": [
+        "TxLINE binding supplied at market creation so the market can later be settled",
+        "trustlessly from a `validate_stat` Merkle proof. Pass `fixture_id = 0` for a",
+        "legacy market that will only ever use the oracle-authority path."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "fixture_id",
+            "type": "i64"
+          },
+          {
+            "name": "home_goal_key",
+            "type": "u32"
+          },
+          {
+            "name": "away_goal_key",
+            "type": "u32"
+          },
+          {
+            "name": "goal_period",
+            "type": "i32"
+          },
+          {
+            "name": "settle_not_before",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "BET_SEED",
+      "docs": [
+        "PDA seed for a Bet account: [\"bet\", market, bettor]."
+      ],
+      "type": "bytes",
+      "value": "[98, 101, 116]"
+    },
+    {
+      "name": "FEE_BPS",
+      "docs": [
+        "Protocol fee in basis points (3%). Deducted from gross payouts."
+      ],
+      "type": "u64",
+      "value": "300"
+    },
+    {
+      "name": "MARKET_SEED",
+      "docs": [
+        "PDA seed for a Market account: [\"market\", match_id]."
+      ],
+      "type": "bytes",
+      "value": "[109, 97, 114, 107, 101, 116]"
+    },
+    {
+      "name": "VAULT_SEED",
+      "docs": [
+        "PDA seed for the per-market SOL vault: [\"vault\", market]."
+      ],
+      "type": "bytes",
+      "value": "[118, 97, 117, 108, 116]"
+    }
+  ]
+}

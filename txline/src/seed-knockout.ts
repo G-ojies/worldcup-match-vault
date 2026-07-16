@@ -26,7 +26,7 @@ import * as path from "path";
 
 import { TxlineClient } from "./txline-client";
 
-const ourIdl = require("../../target/idl/worldcup_match_vault.json");
+const ourIdl = require("../worldcup_match_vault.idl.json");
 const RPC = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
 const OUR_PROGRAM = new PublicKey(ourIdl.address);
 const WC = 72; // World Cup competitionId
@@ -205,8 +205,16 @@ async function main() {
   const nowSec = Math.floor(Date.now() / 1000);
   log(`${fixtures.length} current World Cup fixtures to seed (period ${GOAL_PERIOD}, suffix _${SUFFIX}):\n`);
 
+  // Balance guard: this runs unattended on a cron, so never create+fund new
+  // markets once the admin wallet is low. Existing markets are untouched.
+  const BALANCE_FLOOR = Number(process.env.SEED_BALANCE_FLOOR_SOL || 0.4) * LAMPORTS_PER_SOL;
+
   const results: any[] = [];
   for (const f of fixtures) {
+    if ((await connection.getBalance(admin.publicKey)) < BALANCE_FLOOR) {
+      log(`   ⛽ admin balance below ${sol(BALANCE_FLOOR)} SOL floor — skipping remaining new markets`);
+      break;
+    }
     const home = f.home;
     const away = f.away;
     const matchId = `WC_${f.fixtureId}_${SUFFIX}`;
