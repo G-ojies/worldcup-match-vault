@@ -72,8 +72,9 @@ export function useMarkets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
+  // silent=true for background polls so the board doesn't flash its skeleton.
+  const refresh = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     setError(null);
     try {
       const all = await (program.account as any).market.all();
@@ -94,12 +95,16 @@ export function useMarkets() {
     } catch (e: any) {
       setError(e?.message ?? "Failed to load markets");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [program]);
 
+  // Load once, then poll every 20s so new bets and settlements appear live
+  // without a manual refresh. Polls are silent (no skeleton flash).
   useEffect(() => {
     refresh();
+    const id = setInterval(() => refresh(true), 20_000);
+    return () => clearInterval(id);
   }, [refresh]);
 
   return { markets, loading, error, refresh };
