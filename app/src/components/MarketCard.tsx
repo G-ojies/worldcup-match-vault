@@ -11,7 +11,7 @@ export default function MarketCard({ market }: { market: MarketView }) {
   return (
     <Link
       href={`/market/${encodeURIComponent(market.matchId)}`}
-      className="card group block p-5 transition hover:border-turf-500/30 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-turf-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-pitch-950"
+      className="card group block p-5 transition-colors duration-100 ease-out hover:border-turf-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-turf-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-pitch-950"
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <span className="truncate font-mono text-xs text-white/40">{market.matchId}</span>
@@ -32,7 +32,7 @@ export default function MarketCard({ market }: { market: MarketView }) {
         ) : started ? (
           <span className="pill bg-white/10 text-white/60">Awaiting result</span>
         ) : (
-          <span className="pill bg-turf-500/15 text-turf-400">Live · {kickoff}</span>
+          <span className="pill bg-turf-500/15 text-turf-400">Kickoff in {kickoff}</span>
         )}
       </div>
 

@@ -3,6 +3,12 @@ import { PublicKey } from "@solana/web3.js";
 import { betPda, marketPda, outcomeFromAccount, type Outcome } from "@/lib/anchor";
 import { useProgram } from "./useWallet";
 
+// Demo fixtures whose score history has aged out of the TxLINE devnet feed
+// (verified: 0 score + 0 odds updates). Their matches can never finalise or
+// settle, so their unsettled markets are hidden to avoid a permanent
+// "Awaiting result" on finished matches. Settled receipts still show.
+const AGED_OUT_FIXTURES = new Set<number>([18172280, 18179764, 18175397]);
+
 export interface MarketView {
   pubkey: string;
   matchId: string;
@@ -77,6 +83,12 @@ export function useMarkets() {
         // bound to goal-period 0 and cannot settle trustlessly; the _K2 markets
         // carry the corrected binding and replace them one-for-one.
         .filter((m: MarketView) => !/^WC_\d+_KO$/.test(m.matchId))
+        // Hide the aged-out demo markets. These fixtures have been purged from
+        // the TxLINE devnet feed (0 score updates), so their matches can never
+        // finalise or settle — leaving them visible showed "Awaiting result"
+        // forever on ended matches. Settled receipts for these fixtures still
+        // show (only unsettled dead markets are hidden).
+        .filter((m: MarketView) => !(AGED_OUT_FIXTURES.has(m.fixtureId) && !m.isSettled))
         .sort((a: MarketView, b: MarketView) => a.matchTimestamp - b.matchTimestamp);
       setMarkets(views);
     } catch (e: any) {

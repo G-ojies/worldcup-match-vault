@@ -30,7 +30,11 @@ const ourIdl = require("../../target/idl/worldcup_match_vault.json");
 const RPC = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
 const OUR_PROGRAM = new PublicKey(ourIdl.address);
 const WC = 72; // World Cup competitionId
-const SKIP_FIXTURES = new Set([18172280]); // aged demo fixture kept by the retake cron
+// Aged-out demo fixtures: their score history has been purged from the devnet
+// feed (0 updates from scores + odds endpoints), so they can never settle
+// trustlessly. Excluded here so the union-recovery below can't re-seed them as
+// dead _K2 markets; the frontend also hides their unsettled markets.
+const SKIP_FIXTURES = new Set([18172280, 18179764, 18175397]);
 
 // Binding correctness (see seed vs. TxLINE data shape):
 //   - Knockout finals report full-time goals under period 100 (period tracks
